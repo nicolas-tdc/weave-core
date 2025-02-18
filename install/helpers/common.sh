@@ -34,11 +34,13 @@ echo "export USER_INFO=\"$USER_INFO\"" >> .env
 export USER_INFO
 
 # Set permissions
-echo -e "\e[33mSetting permissions for app, .env and .git...\e[0m"
+echo -e "\e[33mSetting permissions...\e[0m"
 chmod -R 755 "$APP_NAME"
 chown -R "$USER_INFO" "$APP_NAME"
-chmod -R 755 .env
-chown -R "$USER_INFO" .env
+if [ -f ".env" ]; then
+    chmod -R 755 .env
+    chown -R "$USER_INFO" .env
+fi
 
 # Run app specific install script
 cd "$APP_NAME"
