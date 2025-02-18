@@ -31,8 +31,8 @@ else
     echo -e "\e[31mError : No .env.dev file found in application folder.\e[0m"
 fi
 
-# Run common installation script
-if [ -f "./install/helpers/common.sh" ]; then
-    echo -e "\e[33mRunning common installation script...\e[0m"
-    ./install/helpers/common.sh
+# Set permissions
+if [ -f "./install/helpers/permissions.sh" ]; then
+    echo -e "\e[33mSetting up permissions...\e[0m"
+    ./install/helpers/permissions.sh
 fi

@@ -3,7 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-echo -e "\e[33mInitializing application...\e[0m"
+echo -e "\e[32mInstall application\e[0m"
+
+if [ -f "./helpers/setup.sh" ]; then
+    echo -e "\e[33mSetting up local environment...\e[0m"
+    ./helpers/setup.sh
+fi
 
 # Application name input
 echo -e "Enter application name (default: 'app'): \c"
@@ -76,15 +81,6 @@ fi
 # Create app directory
 echo -e "\e[33mCreating application directory...\e[0m"]
 mkdir -p $APP_NAME
-
-apt update
-
-# Check if Git is installed
-if ! command -v git >/dev/null 2>&1; then
-    # Install docker
-    echo -e "\e[33mInstalling git..."
-    apt install -y git
-fi
 
 if [ $APP_ENV == "init" ]; then
     if [ -f "./install/initial.sh" ]; then
