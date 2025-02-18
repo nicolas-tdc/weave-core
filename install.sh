@@ -29,7 +29,7 @@ while true; do
     echo -e "Enter your environment init|dev|prod (default: 'dev'): \c"
     read APP_ENV
     APP_ENV=${APP_ENV:-dev}
-    APP_ENV=$([ "$APP_ENV" == "hello" ] && echo "dev" || echo "$APP_ENV")
+    APP_ENV=$([ "$APP_ENV" == "init" ] && echo "dev" || echo "$APP_ENV")
     # Check for valid environment input
     if [ $APP_ENV == "dev"  ] || [ $APP_ENV == "init"  ] || [ $APP_ENV == "prod" ]; then
         break;
