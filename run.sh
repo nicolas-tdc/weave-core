@@ -3,6 +3,7 @@
 # Exit immediately if a command fails
 set -e
 
+
 # Check if the deploy-sk .env file exists
 if ! [ -f "./.env" ]; then
     echo -e "\e[31mError: .env file not found in the deploy-sk directory.\e[0m"
@@ -12,6 +13,15 @@ fi
 # Get development environment variables
 echo -e "\e[33mGet environment variables...\e[0m"
 source .env
+
+#  @TODO Check for services .env and docker-compose and aggregate them in app folder
+# # Set app environment variables
+# if [ -x "$APP_NAME/.env.dev" ]; then
+#     echo -e "\e[33mSetting up application development environment variables...\e[0m"
+#     cp ./$APP_NAME/.env.dev ./$APP_NAME/.env
+# else
+#     echo -e "\e[31mError : No .env.dev file found in application folder.\e[0m"
+# fi
 
 # Navigate to the app directory
 cd "$APP_NAME"

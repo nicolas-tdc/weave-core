@@ -8,21 +8,21 @@ apt update
 # Check if Git is installed
 if ! command -v git >/dev/null 2>&1; then
     # Install docker
-    echo -e "\e[33mInstalling git..."
+    echo -e "\e[33mInstalling git...\e[0m"
     apt install -y git
 fi
 
 # Check if Docker is installed
 if ! command -v docker >/dev/null 2>&1; then
     # Install docker
-    echo -e "\e[33mInstalling docker..."
+    echo -e "\e[33mInstalling docker...\e[0m"
     apt install -y docker
 fi
 
 # Check if Docker Compose is installed
 if ! command -v docker-compose >/dev/null 2>&1; then
     # Install docker
-    echo -e "\e[33mInstalling docker compose..."
+    echo -e "\e[33mInstalling docker compose...\e[0m"
     apt install -y docker-compose
 fi
 
@@ -32,3 +32,12 @@ if ! groups "$USER" | grep -q "\bdocker\b"; then
     echo -e "\e[33mAdding user to Docker group...\e[0m"
     usermod -aG docker $USER
 fi
+
+# User info input for permissions
+echo -e "Enter user info for permissions (default: '\$USER:\$USER'): \c"
+read USER_INFO
+DEFAULT_USER_INFO="$USER:$USER"
+USER_INFO=${USER_INFO:-"$DEFAULT_USER_INFO"}
+# Create and add to .env file
+echo "export USER_INFO=\"$USER_INFO\"" >> .env
+export USER_INFO
