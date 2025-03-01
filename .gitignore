@@ -1,6 +1,6 @@
 # deploy-sk specifics
-/.env.common
 /app/
+/.env.common
 
 # Log files
 *.log
@@ -23,3 +23,5 @@ nbproject/
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Leave empty for app specific inputs

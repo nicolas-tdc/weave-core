@@ -60,16 +60,19 @@ read_default() {
 # Application name input
 echo -e "Enter application name (default: 'app'): \c"
 read_default "APP_NAME" "app"
-ENV_FILE_PATH="./.env.common"
+ENV_FILE_PATH=".env.common"
 # Create app directory
 echo -e "\e[33mCreating application directory...\e[0m"
 mkdir -p $APP_NAME
 # Create and add to .env
-echo "export APP_NAME=\"$APP_NAME\"" > $ENV_FILE_PATH
-# Add to .gitignore file
-grep -w "^app$" .gitignore
-if [ $? == 1 ]; then
-    echo "$APP_NAME" >> .gitignore
+echo "export APP_NAME=\"$APP_NAME\"" > "$ENV_FILE_PATH"
+# Add app folder to .gitignore
+if ! grep -Fxq "/$APP_NAME/" .gitignore; then
+  echo "/$APP_NAME/" >> .gitignore
+fi
+# Add common .env file to .gitignore
+if ! grep -Fxq "/$ENV_FILE_PATH" .gitignore; then
+  echo "/$ENV_FILE_PATH" >> .gitignore
 fi
 
 export APP_NAME

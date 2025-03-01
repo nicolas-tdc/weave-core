@@ -12,9 +12,9 @@ if [ -f "./helpers/app/install-required.sh" ]; then
 fi
 
 # Setup app environment
-if [ -f "./helpers/app/setup-env.sh" ]; then
+if [ -f "./helpers/app/read-env.sh" ]; then
     echo -e "\e[33mSetting up app environment...\e[0m"
-    source ./helpers/app/setup-env.sh
+    source ./helpers/app/read-env.sh
 fi
 
 # Run git auth script
@@ -38,7 +38,7 @@ fi
 # Application versioning
 if [ -f "./helpers/app/init-repo.sh" ]; then
     echo -e "\e[33mApplication versioning...\e[0m"
-    # ./helpers/app/init-repo.sh
+    ./helpers/app/init-repo.sh
 fi
 
 echo -e "\e[32mApplication initialized successfully!\e[0m"
