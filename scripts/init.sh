@@ -30,13 +30,15 @@ if [ -f "./helpers/services/add.sh" ]; then
 fi
 
 # Join .gitignore files
-if [ -f "./helpers/git/join-ignores.sh" ]; then
-    echo -e "\e[33mJoining .gitignore files...\e[0m"
-    ./helpers/git/join-ignores.sh
+if [ -f "./helpers/git/merge-ignores.sh" ]; then
+    echo -e "\e[33mMerging .gitignore files...\e[0m"
+    ./helpers/git/merge-ignores.sh
 fi
 
 # Application versioning
 if [ -f "./helpers/app/init-repo.sh" ]; then
     echo -e "\e[33mApplication versioning...\e[0m"
-    ./helpers/app/init-repo.sh
+    # ./helpers/app/init-repo.sh
 fi
+
+echo -e "\e[32mApplication initialized successfully!\e[0m"
