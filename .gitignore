@@ -1,6 +1,6 @@
 # deploy-sk specifics
 .env.common
-app
+app/
 
 # Log files
 *.log
