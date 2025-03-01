@@ -8,7 +8,7 @@ DEFAULT_BRANCH=$2
 
 # Service repository input
 while true; do
-    echo -e "Enter your repository's SSH clone adress: \c"
+    echo -e "Enter your target repository's SSH clone adress: \c"
     read CLONE_REPOSITORY
     # Check for valid repository input
     if [[ "$CLONE_REPOSITORY" =~ $GIT_SSH_REGEX ]]; then
@@ -19,7 +19,7 @@ while true; do
 done
 
 # Service branch name input
-echo -e "\e[33mEnter branch name to clone from (default: '$DEFAULT_BRANCH'): \c\e[0m"
+echo -e "\e[33mEnter your target branch name to clone from (default: '$DEFAULT_BRANCH'): \c\e[0m"
 read CLONE_BRANCH
 CLONE_BRANCH=${CLONE_BRANCH:-"$DEFAULT_BRANCH"}
 

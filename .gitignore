@@ -1,2 +1,25 @@
-.env
+# Deploy-SK specifics
+.env.common
 app
+
+# Log files
+*.log
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# Eclipse project files
+.project
+.classpath
+.settings/
+
+# NetBeans project files
+nbproject/
+
+# VS Code settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

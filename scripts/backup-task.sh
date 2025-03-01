@@ -19,10 +19,3 @@ mkdir -p $BACKUP_DIR
 # Set backup variables
 TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
 export BACKUP_FILENAME="backup-$TIMESTAMP.tar.gz"
-
-# Run app specific backup script
-cd "$APP_NAME"
-if [ -x "scripts/backup.sh" ]; then
-    echo -e "\e[33mRunning app specific backup script...\e[0m"
-    scripts/backup.sh
-fi
