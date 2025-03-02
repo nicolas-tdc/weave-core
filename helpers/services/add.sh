@@ -20,10 +20,26 @@ while true; do
     SERVICE_NAME=${SERVICE_NAME:-service}
     export SERVICE_NAME
 
-    # Git clone service repository
-    if [ -f "./helpers/git/clone.sh" ]; then
-        ./helpers/git/clone.sh "$APP_NAME/$SERVICE_NAME" "main"
-    fi
+    # Service repository input
+    while true; do
+        echo -e "Enter your service's repository SSH address to clone: \c"
+        read CLONE_REPOSITORY
+        # Check for valid repository input
+        if [[ "$CLONE_REPOSITORY" =~ $GIT_SSH_REGEX ]]; then
+            break;
+        else
+            echo -e "\e]31mInvalid SSH Git clone URL.\e[0m"
+        fi
+    done
+
+    # Service branch name input
+    echo -e "\e[33mEnter your target branch name to clone from (default: 'main'): \c\e[0m"
+    read CLONE_BRANCH
+    CLONE_BRANCH=${CLONE_BRANCH:-main}
+
+    # Clone repository
+    echo -e "\e[33mCloning repository...\e[0m"
+    git clone --single-branch --branch "$CLONE_BRANCH" "$CLONE_REPOSITORY" "$APP_NAME/$SERVICE_NAME"
 
     # Check if service contains necessary files
     if ! [ -f "./$APP_NAME/$SERVICE_NAME/.env.dist" ] || ! [ -f "./$APP_NAME/$SERVICE_NAME/docker-compose.yml" ]; then
@@ -33,23 +49,23 @@ while true; do
         continue;
     fi
 
-    # Format service environment variables and docker-compose file
-    if [ -f "./helpers/services/format-docker-compose.sh" ]; then
-        echo -e "\e[33mFormatting service's docker-compose.yml file...\e[0m"
-        ./helpers/services/format-docker-compose.sh
-    fi
+    format_docker() {
+        # Format service environment variables and docker-compose file
+        if [ -f "./helpers/services/format-docker-compose.sh" ]; then
+            echo -e "\e[33mFormatting service's docker-compose.yml file...\e[0m"
+            ./helpers/services/format-docker-compose.sh
+        fi
+    }
 
-    # Set service's specific scripts permissions
-    if [ -d "./$APP_NAME/$SERVICE_NAME/scripts" ]; then
-        chmod -R 755 "./$APP_NAME/$SERVICE_NAME/scripts"
-    fi
+    initialize_service() {
+        # Initialize service
+        if [ -f "./helpers/services/init.sh" ]; then
+            echo -e "\e[33mInitializing service...\e[0m"
+            ./helpers/services/init.sh
+        fi
+    }
 
-    # Run service's specific initialization script
-    prev_dir=$(pwd)
-    cd "$APP_NAME/$SERVICE_NAME"
-    if [ -d "./scripts" ] && [ -f "./scripts/init.sh" ]; then
-        echo -e "\e[33mRunning service specific initialization script...\e[0m"
-        "./scripts/init.sh"
-    fi
-    cd $prev_dir
+    format_docker &
+    initialize_service &
+    wait
 done

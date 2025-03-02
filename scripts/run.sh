@@ -3,7 +3,6 @@
 # Exit immediately if a command fails
 set -e
 
-
 # Check if the deploy-sk .env file exists
 if ! [ -f "./.env.common" ]; then
     echo -e "\e[31mError: .env.common file not found in the deploy-sk directory.\e[0m"
@@ -14,31 +13,26 @@ fi
 echo -e "\e[33mGet environment variables...\e[0m"
 source .env.common
 
+
+# Check if user is in Docker group
+if ! groups "$USER" | grep -q "\bdocker\b"; then
+    # Add user to Docker group
+    echo -e "\e[33mAdding user to Docker group...\e[0m"
+    sudo usermod -aG docker $USER
+fi
+
+if [ -f "./helpers/app/add-docker-network.sh" ]; then
+    echo -e "\e[33mAdding app docker network...\e[0m"
+    ./helpers/app/add-docker-network.sh
+fi
+
 # Runs all services
-for dir in "$APP_NAME"/*/; do
+for DIR in "$APP_NAME"/*/; do
     (
         # Check if it's a directory
-        if [ -d "$dir" ] && [ -f "$dir/docker-compose.yml" ]; then
-            echo "Entering directory: $dir"
-            cd "$dir"
-
-            if [ $APP_ENV == "dev" ] && [ -f ".env.dev" ]; then
-                cp .env.dev .env
-            fi
-
-            if [ $APP_ENV == "prod" ] && [ -f ".env.prod" ]; then
-                cp .env.prod .env
-            fi
-
-            # Stopping existing containers
-            echo -e "\e[33mStopping existing containers...\e[0m"
-            docker-compose down
-
-            # Building and starting containers
-            echo -e "\e[33mBuilding and starting container for service $dir...\e[0m"
-            docker-compose up --build -d
-
-            # Go back to the base directory
+        if [ -d "$DIR" ] && [ -f "${DIR}scripts/run.sh" ]; then
+            cd "$DIR"
+            scripts/run.sh
             cd - || exit
         fi
     ) &
@@ -46,6 +40,4 @@ done
 
 wait
 
-# Cleaning up unused Docker images
-echo -e "\e[33mCleaning up unused Docker images...\e[0m"
-docker system prune -af
+echo -e "\e[32mAll services running\e[0m"

@@ -80,7 +80,7 @@ export APP_NAME
 GIT_SSH_REGEX="^git@[a-zA-Z0-9.-]+:[^/]+/.+\.git$"
 # Application repostiory input
 while true; do
-    echo -e "Enter your application new repository's SSH URL: \c"
+    echo -e "Enter your application's repository SSH URL: \c"
     read APP_REPOSITORY
     # Check for valid repository input
     if [[ "$APP_REPOSITORY" =~ $GIT_SSH_REGEX ]]; then

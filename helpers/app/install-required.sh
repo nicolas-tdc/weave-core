@@ -11,3 +11,17 @@ if ! command -v git >/dev/null 2>&1; then
     echo -e "\e[33mInstalling git...\e[0m"
     sudo apt install -y git
 fi
+
+# Check if Docker is installed
+if ! command -v docker >/dev/null 2>&1; then
+    # Install docker
+    echo -e "\e[33mInstalling docker...\e[0m"
+    sudo apt install -y docker
+fi
+
+# Check if Docker Compose is installed
+if ! command -v docker-compose >/dev/null 2>&1; then
+    # Install docker
+    echo -e "\e[33mInstalling docker compose...\e[0m"
+    sudo apt install -y docker-compose
+fi
