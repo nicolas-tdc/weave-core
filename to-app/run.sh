@@ -10,10 +10,11 @@ if ! [ -f "./.env.common" ]; then
 fi
 
 # Get development environment variables
-echo -e "\e[33mGet environment variables...\e[0m"
+echo -e "\e[33mGet common environment variables...\e[0m"
 source .env.common
 
 
+# @todo: necessary ? needs login logout so maybe indicate in documentation
 # Check if user is in Docker group
 if ! groups "$USER" | grep -q "\bdocker\b"; then
     # Add user to Docker group
@@ -21,13 +22,20 @@ if ! groups "$USER" | grep -q "\bdocker\b"; then
     sudo usermod -aG docker $USER
 fi
 
-if [ -f "./helpers/app/add-docker-network.sh" ]; then
-    echo -e "\e[33mAdding app docker network...\e[0m"
-    ./helpers/app/add-docker-network.sh
+# Add network if it doesn't exist already
+NETWORK_NAME="${APP_NAME}_network"
+
+# Check if the network exists
+docker network ls --filter name="$NETWORK_NAME" -q > /dev/null
+if [ $? -eq 0 ]; then
+  echo -e "\e[32mNetwork '$NETWORK_NAME' already exists.\e[0m"
+else
+  echo -e "\e[33mCreating network '$NETWORK_NAME'...\e[0m"
+  sudo docker network create "$NETWORK_NAME"
 fi
 
 # Runs all services
-for DIR in "$APP_NAME"/*/; do
+for DIR in ./*/; do
     (
         # Check if it's a directory
         if [ -d "$DIR" ] && [ -f "${DIR}scripts/run.sh" ]; then

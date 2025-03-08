@@ -18,7 +18,6 @@ source .env.common
 for dir in "$APP_NAME"/*/; do
     # Check if it's a directory
     if [ -d "$dir" ] && [ -f "$dir/docker-compose.yml" ]; then
-        echo "Entering directory: $dir"
         cd "$dir"
 
         # Stopping existing containers

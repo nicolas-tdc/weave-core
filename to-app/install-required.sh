@@ -7,7 +7,7 @@ sudo apt update
 
 # Check if Git is installed
 if ! command -v git >/dev/null 2>&1; then
-    # Install docker
+    # Install git
     echo -e "\e[33mInstalling git...\e[0m"
     sudo apt install -y git
 fi

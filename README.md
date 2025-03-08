@@ -2,19 +2,9 @@
 
 # Launch scripts from root directory
 
-init.sh
+initialize.sh
 
 install.sh
-
-run.sh
-
-stop.sh
-
-backup-task
-
-backup-enable
-
-backup-disable
 
 # Available services :
 

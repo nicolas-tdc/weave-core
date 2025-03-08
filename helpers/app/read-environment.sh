@@ -25,7 +25,7 @@ read_default() {
 
     var_name="$1"
 
-    # If the default value is provided initially, store it in a persistent variable
+    # If default value is provided initially, store it in a persistent variable
     if [ -n "$2" ]; then
         eval "DEFAULT_${var_name}=\"$2\""
     fi
@@ -51,7 +51,6 @@ read_default() {
 
     # Dynamically assign the input value to the variable
     eval "$var_name=\"${input_var}\""
-
     # Update the persistent default value for the next use
     eval "DEFAULT_${var_name}=\"${input_var}\""
 }
@@ -60,6 +59,28 @@ read_default() {
 # Application name input
 echo -e "Enter application name (default: 'app'): \c"
 read_default "APP_NAME" "app"
+
+ls -al
+
+# Chose path for application directory
+while true; do
+    echo -e "Enter path for application directory (default: '../'): \c"
+    read -e "APP_PATH"
+    APP_PATH=${APP_PATH:-"../"}
+    # Expand tilde (~) to full home directory path
+    APP_PATH=$(eval echo "$APP_PATH")
+    # Check for valid path input
+    if [ -d "$APP_PATH" ]; then
+        cd $APP_PATH
+        break;
+    else
+        echo -e "\e[31mInvalid path. Please choose a valid path.\e[0m"
+    fi
+done
+
+ls -al
+
+# Define paths
 ENV_FILE_PATH=".env.common"
 # Create app directory
 echo -e "\e[33mCreating application directory...\e[0m"
