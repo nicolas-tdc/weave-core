@@ -3,32 +3,33 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-if ! command -v git >/dev/null 2>&1 || \
-    ! command -v docker >/dev/null 2>&1 || \
-    ! command -v docker-compose >/dev/null 2>&1; then
+# Define required packages
+packages=("git" "docker" "docker-compose" "mysql-client" "djinn")
 
+# Check if a package is installed
+is_installed() {
+    dpkg -l | grep -q "^ii  $1 "
+}
+
+# Check for missing packages
+needs_update=false
+for pkg in "${packages[@]}"; do
+    if ! is_installed "$pkg"; then
+        needs_update=true
+        break
+    fi
+done
+
+# If at least one package is missing, update and install
+if [ "$needs_update" = true ]; then
     sudo apt update
-
-    # Check if Git is installed
-    if ! command -v git >/dev/null 2>&1; then
-        # Install git
-        echo -e "\e[33mInstalling git...\e[0m"
-        sudo apt install -y git
-    fi
-
-    # Check if Docker is installed
-    if ! command -v docker >/dev/null 2>&1; then
-        # Install docker
-        echo -e "\e[33mInstalling docker...\e[0m"
-        sudo apt install -y docker
-    fi
-
-    # Check if Docker Compose is installed
-    if ! command -v docker-compose >/dev/null 2>&1; then
-        # Install docker
-        echo -e "\e[33mInstalling docker compose...\e[0m"
-        sudo apt install -y docker-compose
-    fi
+    for pkg in "${packages[@]}"; do
+        if ! is_installed "$pkg"; then
+            echo -e "\e[33mInstalling $pkg...\e[0m"
+            sudo apt install -y "$pkg"
+        fi
+    done
+    sudo apt autoremove
 else
-    echo -e "\e[32mAlready installed.\e[0m"
+    echo -e "\e[32mAll packages are already installed.\e[0m"
 fi
