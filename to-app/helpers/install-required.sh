@@ -4,7 +4,7 @@
 set -e
 
 # Define required packages
-packages=("git" "docker" "docker-compose" "mysql-client" "djinn")
+packages=("git" "docker" "docker-compose")
 
 # Check if a package is installed
 is_installed() {
