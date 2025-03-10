@@ -38,8 +38,8 @@ fi
 ) &
 # Copy application scripts
 (
-    if [ -f "./helpers/services/copy-scripts.sh" ]; then
-        echo -e "\e[33mCopying scripts to service...\e[0m"
+    if [ -f "./helpers/utils/copy-directory-files.sh" ]; then
+        echo -e "\e[33mCopying files to application directory...\e[0m"
         ./helpers/utils/copy-directory-files.sh "./to-app/*" "./$APP_NAME"
     fi
 ) &
