@@ -7,13 +7,10 @@ set -e
 echo "Please enter the backup time gap in seconds:"
 read BACKUP_TIMEGAP
 
-# Add or update the BACKUP_TIMEGAP in the .env file
-echo "BACKUP_TIMEGAP=$BACKUP_TIMEGAP" >> .env
-
 # Check if cron job already exists, and remove it if necessary
 crontab -l | grep -v 'backup_task.sh' | crontab -
 
 # Add cron job to run backup_task.sh every hour, passing the BACKUP_TIMEGAP from .env
-(crontab -l; echo "0 * * * * source .env && ./backup_task.sh \$BACKUP_TIMEGAP") | crontab -
+(crontab -l; echo "0 * * * * ./backup_task.sh \$BACKUP_TIMEGAP") | crontab -
 
 echo -e "\e[31mBackup time gap set to $BACKUP_TIMEGAP seconds and cron job created.\e[0m"

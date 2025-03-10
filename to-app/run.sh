@@ -3,16 +3,16 @@
 # Exit immediately if a command fails
 set -e
 
-# Check if the deploy-sk .env file exists
-if ! [ -f "./.env.common" ]; then
-    echo -e "\e[31mError: .env.common file not found in the deploy-sk directory.\e[0m"
-    exit 1
+# Set and source environment variables
+if [ -f "./helpers/set-environment.sh" ]; then
+    echo -e "\e[33mSetting environment...\e[0m"
+    source ./helpers/set-environment.sh
 fi
 
-# Get development environment variables
-echo -e "\e[33mGet common environment variables...\e[0m"
-source .env.common
-
+if [ -f "./helpers/install-required.sh" ]; then
+    echo -e "\e[33mInstalling required packages...\e[0m"
+    ./helpers/install-required.sh
+fi
 
 # @todo: necessary ? needs login logout so maybe indicate in documentation
 # Check if user is in Docker group
@@ -35,11 +35,11 @@ else
 fi
 
 # Runs all services
-for DIR in ./*/; do
+for SERVICE_PATH in ./*/; do
     (
         # Check if it's a directory
-        if [ -d "$DIR" ] && [ -f "${DIR}scripts/run.sh" ]; then
-            cd "$DIR"
+        if [ -d "$SERVICE_PATH" ] && [ -f "${SERVICE_PATH}scripts/run.sh" ]; then
+            cd "$SERVICE_PATH"
             scripts/run.sh
             cd - || exit
         fi
@@ -48,4 +48,4 @@ done
 
 wait
 
-echo -e "\e[32mAll services running\e[0m"
+echo -e "\e[32mAll services running!\e[0m"

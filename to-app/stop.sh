@@ -3,33 +3,40 @@
 # Exit immediately if a command fails
 set -e
 
-
-# Check if the deploy-sk .env file exists
-if ! [ -f "./.env.common" ]; then
-    echo -e "\e[31mError: .env.common file not found in the deploy-sk directory.\e[0m"
-    exit 1
+# Set and source environment variables
+if [ -f "./helpers/set-environment.sh" ]; then
+    echo -e "\e[33mSetting environment...\e[0m"
+    source ./helpers/set-environment.sh
 fi
 
-# Get development environment variables
-echo -e "\e[33mGet environment variables...\e[0m"
-source .env.common
+# Install required packages
+if [ -f "./helpers/install-required.sh" ]; then
+    echo -e "\e[33mInstalling required packages...\e[0m"
+    ./helpers/install-required.sh
+fi
 
-# Runs all services
-for dir in "$APP_NAME"/*/; do
-    # Check if it's a directory
-    if [ -d "$dir" ] && [ -f "$dir/docker-compose.yml" ]; then
-        cd "$dir"
-
-        # Stopping existing containers
-        echo -e "\e[33mStopping existing containers...\e[0m"
-        docker-compose down
-
-        # Go back to the base directory
-        cd - || exit
-    fi
+# Stop all services
+for SERVICE_PATH in ./*/; do
+    (
+        # Check if it's a directory
+        if [ -d "$SERVICE_PATH" ] && [ -f "${SERVICE_PATH}scripts/stop.sh" ]; then
+            cd "$SERVICE_PATH"
+            scripts/stop.sh
+            cd - || exit
+        fi
+    ) &
 done
 
-# Cleaning up unused Docker images
-echo -e "\e[33mCleaning up unused Docker images...\e[0m"
-docker system prune -af
+wait
 
+echo -e "\e[32mAll services stopped!\e[0m"
+
+# Remove network if it exists
+NETWORK_NAME="${APP_NAME}_network"
+docker network ls --filter name="$NETWORK_NAME" -q > /dev/null
+if [ $? -eq 0 ]; then
+    docker network rm "$NETWORK_NAME"
+    echo -e "\e[32mNetwork '$NETWORK_NAME' removed.\e[0m"
+fi
+
+echo -e "\e[32mApplication stopped!\e[0m"

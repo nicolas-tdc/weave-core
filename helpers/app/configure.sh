@@ -55,14 +55,14 @@ read_default() {
     eval "DEFAULT_${var_name}=\"${input_var}\""
 }
 
-
 # Application name input
 echo -e "Enter application name (default: 'app'): \c"
-read_default "APP_NAME" "app"
+read "APP_NAME"
+APP_NAME=${APP_NAME:-"app"}
 
-ls -al
+export APP_NAME
 
-# Chose path for application directory
+# Application directory path input
 while true; do
     echo -e "Enter path for application directory (default: '../'): \c"
     read -e "APP_PATH"
@@ -78,25 +78,17 @@ while true; do
     fi
 done
 
-ls -al
-
-# Define paths
-ENV_FILE_PATH=".env.common"
 # Create app directory
 echo -e "\e[33mCreating application directory...\e[0m"
 mkdir -p $APP_NAME
-# Create and add to .env
-echo "export APP_NAME=\"$APP_NAME\"" > "$ENV_FILE_PATH"
-# Add app folder to .gitignore
-if ! grep -Fxq "/$APP_NAME/" .gitignore; then
-  echo "/$APP_NAME/" >> .gitignore
-fi
-# Add common .env file to .gitignore
-if ! grep -Fxq "/$ENV_FILE_PATH" .gitignore; then
-  echo "/$ENV_FILE_PATH" >> .gitignore
-fi
 
-export APP_NAME
+DEV_ENV_FILE=".env.dev"
+STAGING_ENV_FILE=".env.staging"
+PROD_ENV_FILE=".env.prod"
+
+echo "export APP_NAME=\"$APP_NAME\"" > $DEV_ENV_FILE
+echo "export APP_NAME=\"$APP_NAME\"" > $STAGING_ENV_FILE
+echo "export APP_NAME=\"$APP_NAME\"" > $PROD_ENV_FILE
 
 GIT_SSH_REGEX="^git@[a-zA-Z0-9.-]+:[^/]+/.+\.git$"
 # Application repostiory input
@@ -111,31 +103,18 @@ while true; do
     fi
 done
 # Add to .env file
-echo "export APP_REPOSITORY=\"$APP_REPOSITORY\"" >> $ENV_FILE_PATH
+echo "export APP_REPOSITORY=\"$APP_REPOSITORY\"" >> $DEV_ENV_FILE
+echo "export APP_REPOSITORY=\"$APP_REPOSITORY\"" >> $STAGING_ENV_FILE
+echo "export APP_REPOSITORY=\"$APP_REPOSITORY\"" >> $PROD_ENV_FILE
 
 export APP_REPOSITORY
-
-# Application environment input
-while true; do
-    echo -e "Enter your environment dev|prod (default: 'dev'): \c"
-    read_default "APP_ENV" "dev"
-    # Check for valid environment input
-    if [ $APP_ENV == "dev"  ] || [ $APP_ENV == "prod" ]; then
-        break;
-    else
-        echo -e "\e[31mInvalid input. Please choose a valid environment: dev|prod.\e[0m"
-    fi
-done
-# Add to .env file
-echo "export APP_ENV=\"$APP_ENV\"" >> $ENV_FILE_PATH
-
-export APP_ENV
 
 # Input main branch name
 echo -e "Enter your main branch name (default: 'main'): \c"
 read_default "MAIN_BRANCH" "main"
 # Add to .env file
-echo "export MAIN_BRANCH=\"$MAIN_BRANCH\"" >> $ENV_FILE_PATH
+echo "export BRANCH=\"$BRANCH\"" >> $STAGING_ENV_FILE
+echo "export BRANCH=\"$BRANCH\"" >> $PROD_ENV_FILE
 
 export MAIN_BRANCH
 
@@ -143,7 +122,7 @@ export MAIN_BRANCH
 echo -e "Enter your development branch name (default: 'devel'): \c"
 read_default "DEV_BRANCH" "devel"
 # Add to .env file
-echo "export DEV_BRANCH=\"$DEV_BRANCH\"" >> $ENV_FILE_PATH
+echo "export BRANCH=\"$DEV_BRANCH\"" >> $DEV_ENV_FILE
 
 export DEV_BRANCH
 
@@ -152,5 +131,7 @@ echo -e "Enter user info for permissions (default: '\$USER:\$USER'): \c"
 read USER_INFO
 read_default "USER_INFO" "$USER:$USER"
 # Create and add to .env file
-echo "export USER_INFO=\"$USER_INFO\"" >> $ENV_FILE_PATH
+echo "export USER_INFO=\"$USER_INFO\"" >> $DEV_ENV_FILE
+echo "export USER_INFO=\"$USER_INFO\"" >> $STAGING_ENV_FILE
+echo "export USER_INFO=\"$USER_INFO\"" >> $PROD_ENV_FILE
 export USER_INFO

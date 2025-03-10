@@ -19,8 +19,6 @@ if [[ ! -f "docker-compose.yml" && ! -f "docker-compose.yml.dist" && ! -f "docke
     exit 1
 fi
 
-echo -e "\e[33mRunning mongodb-sk...\e[0m"
-
 # Stopping existing containers
 (
     echo -e "\e[33mStopping existing containers...\e[0m"

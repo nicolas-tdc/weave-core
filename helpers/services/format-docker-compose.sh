@@ -8,11 +8,11 @@ set -e
 COMPOSE_FILE="$APP_NAME/$SERVICE_NAME/docker-compose.yml"
 NETWORK_NAME="${APP_NAME}_network"
 CONTAINER_NAME="${APP_NAME}_${SERVICE_NAME}"
-ENV_FILE="../../.env.common"
+COMMON_ENV_FILE_PATH="../../$COMMON_ENV_FILE_NAME"
 
 # Ensure the additional env file is added
-if ! grep -q "$ENV_FILE" "$COMPOSE_FILE"; then
-  sed -i '/env_file:/a\ \ \ \ \ \ - '"$ENV_FILE" "$COMPOSE_FILE"
+if ! grep -q "$COMMON_ENV_FILE_PATH" "$COMPOSE_FILE"; then
+  sed -i '/env_file:/a\ \ \ \ \ \ - '"$COMMON_ENV_FILE_PATH" "$COMPOSE_FILE"
 fi
 
 # Ensure each service has the network assigned and container_name is set dynamically

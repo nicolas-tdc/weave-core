@@ -5,10 +5,16 @@ set -e
 
 echo -e "\e[32mLaunching application initialization!\e[0m"
 
+# Install required packages
+if [ -f "./helpers/install-required.sh" ]; then
+    echo -e "\e[33mInstalling required packages...\e[0m"
+    source ./helpers/install-required.sh
+fi
+
 # Setup app environment
-if [ -f "./helpers/app/read-environment.sh" ]; then
+if [ -f "./helpers/app/configure.sh" ]; then
     echo -e "\e[33mSetting up app environment...\e[0m"
-    source ./helpers/app/read-environment.sh
+    source ./helpers/app/configure.sh
 fi
 
 # Run git auth script
