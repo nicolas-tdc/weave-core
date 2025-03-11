@@ -1,11 +1,9 @@
-# deploy-sk
-# FlexStack
+# weave
 
 # Launch scripts from root directory
 
-initialize-app.sh
-
-install-app.sh
+weave.sh init
+weave.sh install
 
 # App scripts
 

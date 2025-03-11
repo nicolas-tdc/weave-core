@@ -5,3 +5,7 @@
 #   Logout & login
 
 # Scripts available with usage details
+
+./weave.sh run
+./weave.sh run <environment>
+...
