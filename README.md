@@ -1,8 +1,13 @@
 # weave
 
-# Launch scripts from root directory
+# Initializing and installing
 
+Launch commands from root directory.
+
+## Initialize application
 weave.sh init
+
+## Install application
 weave.sh install
 
 # App scripts
