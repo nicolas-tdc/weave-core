@@ -25,9 +25,9 @@ if [ -f "./weave/helpers/config-init.sh" ]; then
 fi
 
 # Copy default application files
-if [ -d "./default-app" ] && [ -d "$APP_PATH/$APP_NAME" ]; then
+if [ -d "./weave/default-app" ] && [ -d "$APP_PATH/$APP_NAME" ]; then
     echo -e "\e[33mCopying default application files...\e[0m"
-    sudo cp -r ./default-app/* "$APP_PATH/$APP_NAME"
+    sudo cp -r ./weave/default-app/* "$APP_PATH/$APP_NAME"
 fi
 
 # Move to app directory
