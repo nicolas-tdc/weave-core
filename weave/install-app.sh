@@ -6,18 +6,18 @@ set -e
 echo -e "\e[32mLaunching application installation!\e[0m"
 
 # Install required packages
-if [ -f "./helpers/install-required.sh" ]; then
-    source ./helpers/install-required.sh
+if [ -f "./weave/helpers/install-required.sh" ]; then
+    source ./weave/helpers/install-required.sh
 fi
 
 # Common application configurations
-if [ -f "./helpers/config-common.sh" ]; then
-    source ./helpers/config-common.sh
+if [ -f "./weave/helpers/config-common.sh" ]; then
+    source ./weave/helpers/config-common.sh
 fi
 
 # Initial application configurations
-if [ -f "./helpers/config-install.sh" ]; then
-    source ./helpers/config-install.sh
+if [ -f "./weave/helpers/config-install.sh" ]; then
+    source ./weave/helpers/config-install.sh
 fi
 
 # Clone repository
@@ -27,8 +27,8 @@ git clone --single-branch --branch "$BRANCH" "$APP_REPOSITORY" "$APP_NAME"
 cd $APP_NAME
 
 # Execute service specific install scripts
-if [ -f "./helpers/services/execute-specific.sh" ]; then
-    ./helpers/services/execute-specific.sh "install.sh"
+if [ -f "./weave/helpers/services/execute-specific.sh" ]; then
+    ./weave/helpers/services/execute-specific.sh "install.sh"
 fi
 
 echo -e "\e[32mApplication installed!\e[0m"

@@ -3,8 +3,8 @@
 # Exit immediately if a command fails
 set -e
 
-if [ -f "./helpers/set-environment.sh" ]; then
-    source ./helpers/set-environment.sh $1
+if [ -f "./weave/helpers/set-environment.sh" ]; then
+    source ./weave/helpers/set-environment.sh $1
 fi
 
 echo -e "\e[33mUpdating $SERVICE_NAME...\e[0m"
