@@ -7,49 +7,65 @@ echo -e "\e[32mLaunching application initialization!\e[0m"
 
 # Install required packages
 if [ -f "./helpers/install-required.sh" ]; then
-    echo -e "\e[33mInstalling required packages...\e[0m"
     source ./helpers/install-required.sh
 fi
 
-# Setup app environment
-if [ -f "./helpers/app/configure.sh" ]; then
-    echo -e "\e[33mSetting up app environment...\e[0m"
-    source ./helpers/app/configure.sh
+# Common application configurations
+if [ -f "./helpers/config-common.sh" ]; then
+    source ./helpers/config-common.sh
 fi
+
+# Create app directory
+echo -e "\e[33mCreating application directory...\e[0m"
+mkdir -p "$APP_PATH/$APP_NAME"
+
+# Initial application configurations
+if [ -f "./helpers/config-init.sh" ]; then
+    source ./helpers/config-init.sh
+fi
+
+# Copy default application files
+if [ -d "./default-app" ] && [ -d "$APP_PATH/$APP_NAME" ]; then
+    echo -e "\e[33mCopying default application files...\e[0m"
+    sudo cp -r ./default-app/* "$APP_PATH/$APP_NAME"
+fi
+
+# Move to app directory
+cd "$APP_PATH/$APP_NAME"
 
 # Run git auth script
 if [ -f "./helpers/git/ssh-agent.sh" ]; then
-    echo -e "\e[33mGit authentication...\e[0m"
     source ./helpers/git/ssh-agent.sh
 fi
 
-# Add services
-if [ -f "./helpers/services/add.sh" ]; then
-    echo -e "\e[33mAdding services...\e[0m"
-    ./helpers/services/add.sh
+# Configure services
+if [ -f "./helpers/services/config.sh" ]; then
+    ./helpers/services/config.sh
 fi
 
 # Join .gitignore files
-(
-    if [ -f "./helpers/git/merge-ignores.sh" ]; then
-        echo -e "\e[33mMerging .gitignore files...\e[0m"
-        ./helpers/git/merge-ignores.sh
-    fi
-) &
-# Copy application scripts
-(
-    if [ -f "./helpers/utils/copy-directory-files.sh" ]; then
-        echo -e "\e[33mCopying files to application directory...\e[0m"
-        ./helpers/utils/copy-directory-files.sh "./to-app/*" "./$APP_NAME"
-    fi
-) &
-
-wait
-
-# Application versioning
-if [ -f "./helpers/app/initialize-repository.sh" ]; then
-    echo -e "\e[33mInitializing git repository...\e[0m"
-    ./helpers/app/initialize-repository.sh
+if [ -f "./helpers/git/merge-ignores.sh" ]; then
+    ./helpers/git/merge-ignores.sh
 fi
+
+sudo chmod -R 755 ./
+sudo chown -R $USER:$USER ./
+
+# # Initialize git repository and create defined branches
+echo -e "\e[33mInitializing and pushing application with services to repository...\e[0m"
+# Commit and push app with services to repository
+git init --initial-branch="$MAIN_BRANCH"
+git add .
+git commit -m "Initial commit $APP_NAME"
+git remote add origin "$APP_REPOSITORY"
+# Main branch
+git push -u origin "$MAIN_BRANCH"
+# Staging branch
+git checkout -b "$STAGING_BRANCH"
+git push -u origin "$MAIN_BRANCH:$STAGING_BRANCH"   
+# Development branch
+git checkout "$MAIN_BRANCH"
+git checkout -b "$DEV_BRANCH"
+git push -u origin "$MAIN_BRANCH:$DEV_BRANCH"
 
 echo -e "\e[32mApplication initialized successfully!\e[0m"

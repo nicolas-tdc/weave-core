@@ -3,16 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-if ! command -v git >/dev/null 2>&1; then
-
-    sudo apt update
-
-    # Check if Git is installed
-    if ! command -v git >/dev/null 2>&1; then
-        # Install git
-        echo -e "\e[33mInstalling git...\e[0m"
-        sudo apt install -y git
-    fi
-else
-    echo -e "\e[32mAlready installed.\e[0m"
+if [ -f "./default-app/helpers/utils/install-packages.sh" ]; then
+    ./default-app/helpers/utils/install-packages.sh \
+        git
 fi

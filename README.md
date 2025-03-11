@@ -1,13 +1,16 @@
 # deploy-sk
+# FlexStack
 
 # Launch scripts from root directory
 
-initialize.sh
+initialize-app.sh
 
-install.sh
+install-app.sh
 
-# Available services :
+# App scripts
 
-javalin-sk : REPO_URL
+Link to default app readme
 
-vanillajs-sk : REPO_URL
+# Service scripts
+
+Link to default service readme
