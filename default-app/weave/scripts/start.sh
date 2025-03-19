@@ -3,7 +3,7 @@
 # Exit immediately if a command fails
 set -e
 
-# Source common configuration helpers
+# Source utilities helpers
 if [ -f "./weave/helpers/utils.sh" ]; then
     source ./weave/helpers/utils.sh
 else
@@ -11,7 +11,7 @@ else
     exit 1
 fi
 
-# Source common configuration helpers
+# Source docker helpers
 if [ -f "./weave/helpers/docker.sh" ]; then
     source ./weave/helpers/docker.sh
 else
@@ -19,7 +19,7 @@ else
     exit 1
 fi
 
-# Source common configuration helpers
+# Source services helpers
 if [ -f "./weave/helpers/services.sh" ]; then
     source ./weave/helpers/services.sh
 else
@@ -32,9 +32,8 @@ set_application_environment $1
 echo -e "\e[33mTrying to start application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
 
 install_packages \
-    git \
     docker \
-    docker-network
+    docker-compose
 
 create_network "$APP_NAME-main-network"
 

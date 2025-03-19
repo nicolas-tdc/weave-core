@@ -7,12 +7,17 @@ set -e
 check_default_files() {
     ls -al
     if ! [ -d "./default-app" ]; then
-        echo -e "\e[31mCannot find default application files! Exiting...\e[0m"
+        echo -e "\e[31mCannot find default application folder! Exiting...\e[0m"
         exit 1
     fi
 
     if ! [ -d "./default-service" ]; then
-        echo -e "\e[31mCannot find default service files! Exiting...\e[0m"
+        echo -e "\e[31mCannot find default service folder! Exiting...\e[0m"
+        exit 1
+    fi
+
+    if ! [ -d "./available-services" ]; then
+        echo -e "\e[31mCannot find available services folder! Exiting...\e[0m"
         exit 1
     fi
 }
@@ -23,5 +28,6 @@ copy_default_files() {
         echo -e "\e[33mCopying default files...\e[0m"
         sudo cp -r ./default-app/* "$APP_PATH/$APP_NAME"
         sudo cp -r ./default-service "$APP_PATH/$APP_NAME/weave"
+        sudo cp -r ./available-services "$APP_PATH/$APP_NAME/weave"
     fi
 }

@@ -48,8 +48,8 @@ echo -e "\e[32mDefault weave files copied successfully.\e[0m"
 
 # Add and configure services
 echo -e "\e[33mAdding and configuring services...\e[0m"
-authenticate_ssh_agent
-configure_services "$APP_PATH/$APP_NAME/$SERVICES_DIRECTORY"
+configure_weave_services "$APP_PATH/$APP_NAME/$SERVICES_DIRECTORY" "./available-services"
+configure_external_services "$APP_PATH/$APP_NAME/$SERVICES_DIRECTORY"
 
 # Move to app directory
 echo -e "\e[33mMoving to application directory...\e[0m"

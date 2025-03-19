@@ -34,29 +34,6 @@ select_remote_branch() {
     done
 }
 
-authenticate_ssh_agent() {
-    # Input ssh private key path
-    echo -e "Enter your ssh private key path (default: ~/.ssh/id_ed25519): \c"
-    read ssh_private_key_path
-    ssh_private_key_path=${ssh_private_key_path:-$HOME/.ssh/id_ed25519}  # Expand tilde properly
-
-    # Expand tilde manually if it exists at the beginning
-    if [[ "$ssh_private_key_path" == ~* ]]; then
-        ssh_private_key_path="${HOME}${ssh_private_key_path:1}"
-    fi
-
-    # Ensure the key file exists
-    if [ ! -f "$ssh_private_key_path" ]; then
-        echo "Error: SSH key not found at '$ssh_private_key_path'"
-        exit 1
-    fi
-
-    # Setup ssh agent
-    eval "$(ssh-agent -s)"
-    export SSH_AUTH_SOCK
-    ssh-add "$ssh_private_key_path"
-}
-
 merge_gitignore_files() {
     if [ -z "$1" ] || [ -z "$2" ]; then
         echo -e "\e[31mmerge_gitignore_files() - Error: First and second argument are required.\e[0m"

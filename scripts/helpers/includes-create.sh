@@ -14,10 +14,10 @@ else
 fi
 
 # Source initial configuration helpers
-if [ -f "./scripts/helpers/config-initial.sh" ]; then
-    source ./scripts/helpers/config-initial.sh
+if [ -f "./scripts/helpers/config-create.sh" ]; then
+    source ./scripts/helpers/config-create.sh
 else
-    echo -e "\e[31mCannot find 'initial' configuration file! Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'create' configuration file! Exiting...\e[0m"
     exit 1
 fi
 

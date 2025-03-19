@@ -3,7 +3,7 @@
 # Exit immediately if a command fails
 set -e
 
-# Source common configuration helpers
+# Source utilities helpers
 if [ -f "./weave/helpers/utils.sh" ]; then
     source ./weave/helpers/utils.sh
 else
@@ -11,7 +11,7 @@ else
     exit 1
 fi
 
-# Source common configuration helpers
+# Source services helpers
 if [ -f "./weave/helpers/services.sh" ]; then
     source ./weave/helpers/services.sh
 else
@@ -22,11 +22,6 @@ fi
 set_application_environment $1
 
 echo -e "\e[33mTrying to backup application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
-
-# install_packages \
-#     git \
-#     docker \
-#     docker-network
 
 # Backup directory path input
 echo -e "Enter backup directory path (default: './backups'): \c"

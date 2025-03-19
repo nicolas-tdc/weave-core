@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Source common configuration helpers
+# Source utilities helpers
 if [ -f "./weave/helpers/utils.sh" ]; then
     source ./weave/helpers/utils.sh
 else
@@ -11,7 +11,7 @@ else
     exit 1
 fi
 
-# Source common configuration helpers
+# Source docker helpers
 if [ -f "./weave/helpers/docker.sh" ]; then
     source ./weave/helpers/docker.sh
 else
@@ -19,7 +19,7 @@ else
     exit 1
 fi
 
-# Source common configuration helpers
+# Source services helpers
 if [ -f "./weave/helpers/services.sh" ]; then
     source ./weave/helpers/services.sh
 else
@@ -31,17 +31,20 @@ set_application_environment $1
 
 echo -e "\e[33mTrying to add services to application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
 
-install_packages \
-    git
-
 # Add and configure services
 echo -e "\e[33mAdding and configuring services...\e[0m"
-authenticate_ssh_agent
-configure_services "$SERVICES_DIRECTORY"
+# Weave services
+configure_weave_services "$SERVICES_DIRECTORY" "./weave/available-services"
+# External services
+install_packages \
+    git
+configure_external_services "$SERVICES_DIRECTORY"
 
+# Merge gitignore files
 echo -e "\e[33mMerging gitignore files...\e[0m"
 merge_gitignore_files \
     "$SERVICES_DIRECTORY" \
     ".gitignore"
 
+# Success message
 echo -e "\e[32mDone adding services to '$APP_NAME' in '$APP_ENV' environment.\e[0m"
