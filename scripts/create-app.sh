@@ -5,7 +5,7 @@ set -e
 
 echo -e "\e[32mCreating weave application...\e[0m"
 
-# Source common configuration helpers
+# Source initial includes helpers
 if [ -f "./scripts/helpers/includes-create.sh" ]; then
     source ./scripts/helpers/includes-create.sh
 else
@@ -18,8 +18,8 @@ echo -e "\e[33mChecking weave default files...\e[0m"
 check_default_files
 
 # Required packages installation
-echo -e "\e[33mInstalling weave required packages...\e[0m"
-install_packages "git"
+install_packages \
+    git
 
 # Application configuration
 echo -e "\e[33mConfiguring application...\e[0m"

@@ -31,7 +31,8 @@ set_application_environment $1
 
 echo -e "\e[33mTrying to update application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
 
-# install_packages \
+# Required packages installation
+# # install_packages \
 #     git
 # @todo: git pull
 

@@ -31,6 +31,7 @@ set_application_environment $1
 
 echo -e "\e[33mTrying to stop application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
 
+# Required packages installation
 install_packages \
     docker \
     docker-compose

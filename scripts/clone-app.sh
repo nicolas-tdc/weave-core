@@ -5,7 +5,7 @@ set -e
 
 echo -e "\e[32mCloning weave application...\e[0m"
 
-# Source common configuration helpers
+# Source clone includes helpers
 if [ -f "./scripts/helpers/includes-clone.sh" ]; then
     source ./scripts/helpers/includes-clone.sh
 else
@@ -14,8 +14,8 @@ else
 fi
 
 # Required packages installation
-echo -e "\e[33mInstalling weave required packages...\e[0m"
-install_packages "git"
+install_packages \
+    git
 
 # Application configuration
 echo -e "\e[33mConfiguring application...\e[0m"

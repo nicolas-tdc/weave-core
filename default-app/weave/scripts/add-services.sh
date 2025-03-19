@@ -35,9 +35,10 @@ echo -e "\e[33mTrying to add services to application '$APP_NAME' in '$APP_ENV' e
 echo -e "\e[33mAdding and configuring services...\e[0m"
 # Weave services
 configure_weave_services "$SERVICES_DIRECTORY" "./weave/available-services"
-# External services
+# Required packages installation
 install_packages \
     git
+# External services
 configure_external_services "$SERVICES_DIRECTORY"
 
 # Merge gitignore files
