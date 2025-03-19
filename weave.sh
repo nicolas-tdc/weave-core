@@ -2,12 +2,12 @@
 
 current_dir=$(pwd)
 
-# Ensure we are executing from the root of the project
+# Execute from project root
 cd "$(dirname "$0")"
 
 case "$1" in
-  init) ./weave/initialize-app.sh ;;
-  install) ./weave/install-app.sh ;;
+  create-app) ./scripts/create-app.sh ;;
+  clone-app) ./scripts/clone-app.sh ;;
 esac
 
 cd "$current_dir"
