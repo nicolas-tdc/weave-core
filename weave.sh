@@ -8,8 +8,8 @@ set -e
   cd "$(dirname "$0")"
 
   case "$1" in
-    create-app) ./scripts/create-app.sh ;;
-    clone-app) ./scripts/clone-app.sh ;;
+    create) ./scripts/create-app.sh ;;
+    clone) ./scripts/clone-app.sh ;;
     update) ./scripts/update.sh;;
     *) 
       echo "Error: Invalid or missing argument. Usage: ./weave.sh <create-app|clone-app|update>" 

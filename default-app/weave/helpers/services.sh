@@ -190,10 +190,6 @@ execute_services_specific_script() {
             cd "$service_path"
             "weave/scripts/$script_name"
             cd - > /dev/null 2>&1
-        elif [ -d "$service_path" ] && [ -f "${service_path}weave/helpers/$script_name" ]; then
-            cd "$service_path"
-            "weave/helpers/$script_name"
-            cd - > /dev/null 2>&1
         fi
     done
 }

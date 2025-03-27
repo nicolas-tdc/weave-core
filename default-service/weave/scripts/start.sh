@@ -36,7 +36,3 @@ docker-compose up --build --remove-orphans -d
 # Cleaning up unused Docker images
 echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Cleaning up unused Docker images...\e[0m"
 docker system prune -af
-
-# Log available ports if in standalone mode
-echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Logging available ports...\e[0m"
-log_available_ports $SERVICE_NAME
