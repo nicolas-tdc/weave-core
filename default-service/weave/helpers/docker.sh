@@ -11,16 +11,19 @@ find_networks() {
         compose_file=$1
     fi
 
-    grep -rohP '(?<=networks:\n\s{2})[^\s:]+' $compose_file | sort -u
+    awk '/networks:/ {getline; print $1}' "$compose_file" | sed 's/://g' | sort -u
 }
 
 # Function to create networks
 create_networks() {
-    networks=$(find_networks $1)
-    echo -e "$networks"
+    networks=$(find_networks "$1")
+    
+    # Loop through networks and create each one
     for net in $networks; do
-        echo "Creating network: $net"
-        docker network create "$net" 2>/dev/null || echo "Network $net already exists."
+        if [ -n "$net" ] && [ "$net" != "-" ]; then
+            echo -e "\e[33mTrying to create network: $net\e[0m"
+            docker network create "$net" 2>/dev/null || echo -e "\e[33mNetwork $net already exists.\e[33m"
+        fi
     done
 }
 

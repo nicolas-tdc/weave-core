@@ -11,6 +11,14 @@ else
     exit 1
 fi
 
+# Source docker helpers
+if [ -f "./weave/helpers/docker.sh" ]; then
+    source ./weave/helpers/docker.sh
+else
+    echo -e "\e[31m$SERVICE_NAME|$APP_ENV: Cannot find 'docker' file! Exiting...\e[0m"
+    exit 1
+fi
+
 set_service_environment $1
 
 # Stopping existing containers

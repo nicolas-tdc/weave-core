@@ -19,15 +19,10 @@ else
     exit 1
 fi
 
-is_standalone=$([ "$0" = "$BASH_SOURCE" ] && echo false || echo true)
-
-if [ "$is_standalone" = true ]; then
-    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Trying to start in standalone mode...\e[0m"
-else
-    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Trying to start...\e[0m"
-fi
-
 set_service_environment $1
+
+echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Trying to start...\e[0m"
+
 create_networks
 
 # Stopping existing containers
@@ -43,7 +38,5 @@ echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Cleaning up unused Docker images...\e[0m"
 docker system prune -af
 
 # Log available ports if in standalone mode
-if [ "$is_standalone" = true ]; then
-    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Logging available ports...\e[0m"
-    log_available_ports $SERVICE_NAME
-fi
+echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Logging available ports...\e[0m"
+log_available_ports $SERVICE_NAME
