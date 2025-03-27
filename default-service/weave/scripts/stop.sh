@@ -17,6 +17,8 @@ set_service_environment $1
 echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Stopping existing containers...\e[0m"
 docker-compose down
 
+remove_networks
+
 # Cleaning up unused Docker images
 echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Cleaning up unused Docker images...\e[0m"
 docker system prune -af

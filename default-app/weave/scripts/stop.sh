@@ -38,6 +38,4 @@ install_packages \
 
 execute_services_specific_script $SERVICES_DIRECTORY "stop.sh"
 
-remove_network "$APP_NAME-main-network"
-
 echo -e "\e[32mApplication '$APP_NAME' stopped in '$APP_ENV' environment.\e[0m"

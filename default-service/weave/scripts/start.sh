@@ -28,16 +28,11 @@ else
 fi
 
 set_service_environment $1
+create_networks
 
 # Stopping existing containers
 echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Stopping existing containers...\e[0m"
 docker-compose down > /dev/null 2>&1
-
-# Format docker-compose file if not in standalone mode
-if [ "$is_standalone" = false ]; then
-    echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Formatting docker-compose.yml file...\e[0m"
-    format_docker_compose $SERVICE_NAME
-fi
 
 # Building and starting containers
 echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Building and starting container...\e[0m"

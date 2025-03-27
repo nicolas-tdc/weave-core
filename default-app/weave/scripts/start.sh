@@ -36,8 +36,6 @@ install_packages \
     docker \
     docker-compose
 
-create_network "$APP_NAME-main-network"
-
 execute_services_specific_script $SERVICES_DIRECTORY "start.sh"
 execute_services_specific_script $SERVICES_DIRECTORY "log-available-ports.sh"
 

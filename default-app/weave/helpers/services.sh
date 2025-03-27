@@ -68,9 +68,18 @@ configure_weave_services() {
         # Remove git remote
         rm -rf "$services_directory/$service_name/.git"
 
+        # Format docker-compose files
+        for env in "dist" "prod" "staging" "dev"; do
+            compose_file="$services_directory/$service_name/docker-compose.yml.$env"
+            if [ -f "$compose_file" ]; then
+                echo -e "\e[33m$$service_name: Formatting docker-compose.yml.$env file...\e[0m"
+                format_docker_compose $APP_NAME $service_name $compose_file
+            fi
+        done
+
         # Weave default files
         if [ -d "./weave/default-service" ] && [ -d "$services_directory/$service_name" ]; then
-            # Copy default service files to service directory
+            # Copy default service files to service's directory
             sudo cp -r ./weave/default-service/* "$services_directory/$service_name"
             sudo chmod -R 755 "$services_directory/$service_name"
         fi
