@@ -11,14 +11,6 @@ else
     exit 1
 fi
 
-# Source docker helpers
-if [ -f "./weave/helpers/docker.sh" ]; then
-    source ./weave/helpers/docker.sh
-else
-    echo -e "\e[31mCannot find 'docker' file! Exiting...\e[0m"
-    exit 1
-fi
-
 # Source services helpers
 if [ -f "./weave/helpers/services.sh" ]; then
     source ./weave/helpers/services.sh

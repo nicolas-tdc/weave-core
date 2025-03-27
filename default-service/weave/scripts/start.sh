@@ -19,31 +19,31 @@ else
     exit 1
 fi
 
-is_standalone=$([ "$0" = "$BASH_SOURCE" ] && echo true || echo false)
+is_standalone=$([ "$0" = "$BASH_SOURCE" ] && echo false || echo true)
 
 if [ "$is_standalone" = true ]; then
-    echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Trying to start in standalone mode...\e[0m"
+    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Trying to start in standalone mode...\e[0m"
 else
-    echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Trying to start...\e[0m"
+    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Trying to start...\e[0m"
 fi
 
 set_service_environment $1
 create_networks
 
 # Stopping existing containers
-echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Stopping existing containers...\e[0m"
+echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Stopping existing containers...\e[0m"
 docker-compose down > /dev/null 2>&1
 
 # Building and starting containers
-echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Building and starting container...\e[0m"
+echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Building and starting container...\e[0m"
 docker-compose up --build --remove-orphans -d
 
 # Cleaning up unused Docker images
-echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Cleaning up unused Docker images...\e[0m"
+echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Cleaning up unused Docker images...\e[0m"
 docker system prune -af
 
 # Log available ports if in standalone mode
 if [ "$is_standalone" = true ]; then
-    echo -e "\e[33m$$SERVICE_NAME|$APP_ENV: Logging available ports...\e[0m"
+    echo -e "\e[33m$SERVICE_NAME|$APP_ENV: Logging available ports...\e[0m"
     log_available_ports $SERVICE_NAME
 fi

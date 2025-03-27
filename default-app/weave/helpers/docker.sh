@@ -17,68 +17,49 @@ format_docker_compose() {
     network_name="${app_name}_network"
     app_env_file_path="../../.env"
 
-    # Ensure the application env file is added
+    # Ensure the application env file is added if not present
     if ! grep -q "$app_env_file_path" "$compose_file"; then
         sed -i '/env_file:/a\ \ \ \ \ \ - '"$app_env_file_path" "$compose_file"
     fi
 
-    # Ensure each service has the network assigned and container_name is set
-    awk -v container_name="$service_name" -v net="$network_name" '
-    BEGIN { inside_service=0; inside_volumes=0; inside_networks=0; inside_service_volumes=0; service_name="" }
+    # Process the docker-compose file
+    awk -v new_prefix="$service_name" -v net="$network_name" '
+    BEGIN { inside_service=0; has_container_name=0; has_networks=0 }
 
     /^services:/ { print; next }
-    /^volumes:/ { print; inside_volumes=1; inside_service=0; next }
-    /^networks:/ { print; inside_networks=1; inside_service=0; next }
-
-    inside_volumes || inside_networks { 
-        if (inside_volumes && /^[[:space:]]{2}([a-zA-Z0-9_-]+):$/) { 
-            gsub(/^[[:space:]]+/, "", $0)
-            gsub(/:$/, "", $0)
-            print "  " container_name "_" $0 ":"  # Rename global volumes
-        } else { 
-            print 
-        }
-        next 
-    }
 
     /^[[:space:]]{2}([a-zA-Z0-9_-]+):$/ {
-        # Capture service name
-        service_name = substr($0, match($0, /^[[:space:]]{2}([a-zA-Z0-9_-]+):/), RLENGTH)
-        gsub(/^[[:space:]]+/, "", service_name)
-        gsub(/:$/, "", service_name)
+        # Capture original service name
+        orig_service_name = substr($0, match($0, /^[[:space:]]{2}([a-zA-Z0-9_-]+):/), RLENGTH)
+        gsub(/^[[:space:]]+/, "", orig_service_name)
+        gsub(/:$/, "", orig_service_name)
 
-        # Modify service name and add container_name
-        modified_service_name = container_name "_" service_name
+        # Create new service name
+        modified_service_name = new_prefix "_" orig_service_name
         print "  " modified_service_name ":"
         
-        # Ensure container_name and networks sections
-        print "    container_name: " modified_service_name
-        print "    networks:"
-        print "      - " net
-        inside_service=1
+        inside_service = 1
+        has_container_name = 0
+        has_networks = 0
         next
     }
 
-    inside_service && /^[[:space:]]{4}container_name:/ { next }  # Remove existing container_name
-    inside_service && /^[[:space:]]{4}volumes:/ { inside_service_volumes=1; print; next }  # Detect service volumes
-    inside_service_volumes && /^[[:space:]]{6}-[[:space:]]*([a-zA-Z0-9_-]+)/ {
-        # Preserve indentation and rename volumes inside services correctly
-        match($0, /^([[:space:]]*)- ([a-zA-Z0-9_-]+)/, groups)
-        print groups[1] "- " container_name "_" groups[2]  # Maintain indentation
-        next
-    }
-    inside_service_volumes && !/^[[:space:]]{6}-/ { inside_service_volumes=0 }
-
-    # Modify the ME_CONFIG_MONGODB_SERVER value
-    inside_service && /^[[:space:]]{6}ME_CONFIG_MONGODB_SERVER:/ {
-        gsub(/mongo/, container_name "_mongo")
-        print
-        next
-    }
+    inside_service && /^[[:space:]]{4}container_name:/ { has_container_name=1; next }
+    inside_service && /^[[:space:]]{4}networks:/ { has_networks=1; next }
 
     { print }
 
-    END { if (inside_service) print "    container_name: " modified_service_name "\n    networks:\n      - " net }
+    # Ensure container_name is inserted immediately after the service starts
+    inside_service && !has_container_name {
+        print "    container_name: " modified_service_name
+        has_container_name = 1
+    }
+
+    # Ensure networks is inserted
+    inside_service && !has_networks {
+        print "    networks:\n      - " net
+        has_networks = 1
+    }
     ' "$compose_file" > tmpfile && mv tmpfile "$compose_file"
 
     # Ensure the networks section exists at the bottom
@@ -86,39 +67,5 @@ format_docker_compose() {
         echo -e "\nnetworks:\n  $network_name:\n    external: true" >> "$compose_file"
     elif ! grep -q "$network_name" "$compose_file"; then
         echo -e "  $network_name:\n    external: true" >> "$compose_file"
-    fi
-}
-
-create_network() {
-    if [ -z "$1" ]; then
-        echo -e "\e[31mcreate_network() - Error: First argument is required.\e[0m"
-        echo -e "\e[31musage: create_network <network_name>...>\e[0m"
-        exit 1
-    fi
-
-    network_name=$1
-
-    # Create app network if it doesn't exist
-    docker network ls --filter name="$network_name" -q > /dev/null
-    if [ $? -eq 0 ]; then
-        echo -e "\e[33mCreating network '$network_name'...\e[0m"
-        sudo docker network create "$network_name"
-    fi
-}
-
-remove_network() {
-    if [ -z "$1" ]; then
-        echo -e "\e[31mremove_network() - Error: First argument is required.\e[0m"
-        echo -e "\e[31musage: remove_network <network_name>...>\e[0m"
-        exit 1
-    fi
-
-    network_name=$1
-
-    # Remove app network if it exists
-    docker network ls --filter name="$network_name" -q > /dev/null
-    if ! [ $? -eq 0 ]; then
-        docker network rm "$network_name"
-        echo -e "\e[32mNetwork '$network_name' removed.\e[0m"
     fi
 }

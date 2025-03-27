@@ -5,7 +5,6 @@ set -e
 
 # Check application and services default files directories exist
 check_default_files() {
-    ls -al
     if ! [ -d "./default-app" ]; then
         echo -e "\e[31mCannot find default application folder! Exiting...\e[0m"
         exit 1

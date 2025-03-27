@@ -12,7 +12,7 @@ set -e
     clone-app) ./scripts/clone-app.sh ;;
     update) ./scripts/update.sh;;
     *) 
-      echo "Error: Invalid or missing argument. Usage: ./weave.sh $0 {create-app|clone-app|update}" 
+      echo "Error: Invalid or missing argument. Usage: ./weave.sh <create-app|clone-app|update>" 
       exit 1 
       ;;
   esac

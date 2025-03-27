@@ -45,10 +45,18 @@ else
     exit 1
 fi
 
+# Source application git helpers
+if [ -f "./default-app/weave/helpers/docker.sh" ]; then
+    source ./default-app/weave/helpers/docker.sh
+else
+    echo -e "\e[31mCannot find default application docker file! Exiting...\e[0m"
+    exit 1
+fi
+
 # Source application services helpers
 if [ -f "./default-app/weave/helpers/services.sh" ]; then
     source ./default-app/weave/helpers/services.sh
 else
-    echo -e "\e[31mCannot find default application 'services' file! Exiting...\e[0m"
+    echo -e "\e[31mCannot find default application services file! Exiting...\e[0m"
     exit 1
 fi

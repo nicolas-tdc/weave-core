@@ -44,7 +44,7 @@ configure_environment_files
 echo -e "\e[32mInitial configuration successful.\e[0m"
 
 copy_default_files
-echo -e "\e[32mDefault weave files copied successfully.\e[0m"
+echo -e "\e[32mDefault app weave files copied successfully.\e[0m"
 
 # Add and configure services
 echo -e "\e[33mAdding and configuring services...\e[0m"

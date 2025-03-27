@@ -17,7 +17,7 @@ find_networks() {
 # Function to create networks
 create_networks() {
     networks=$(find_networks $1)
-    
+    echo -e "$networks"
     for net in $networks; do
         echo "Creating network: $net"
         docker network create "$net" 2>/dev/null || echo "Network $net already exists."
