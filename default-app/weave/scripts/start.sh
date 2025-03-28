@@ -21,7 +21,7 @@ fi
 
 set_application_environment $1
 
-echo -e "\e[33mTrying to start application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
+echo -e "\e[33mTrying to start application '$APP_NAME'...\e[0m"
 
 # Required packages installation
 install_packages \
@@ -31,4 +31,4 @@ install_packages \
 execute_services_specific_script $SERVICES_DIRECTORY "start.sh"
 execute_services_specific_script $SERVICES_DIRECTORY "log-available-ports.sh"
 
-echo -e "\e[32mApplication '$APP_NAME' started in '$APP_ENV' environment.\e[0m"
+echo -e "\e[32mApplication '$APP_NAME' started.\e[0m"

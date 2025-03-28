@@ -1,19 +1,17 @@
 # weave
 
-# Initializing and installing
+# weave commands
 
 Launch commands from root directory.
 
-## Initialize application
-weave.sh init
+## Create weave application
+./weave.sh create
 
-## Install application
-weave.sh install
+## Update weave and submodules.
+./weave.sh update
 
-# App scripts
+# weave-application commands
+[Link to weave-application default README](./default-app/README.md)
 
-Link to default app readme
-
-# Service scripts
-
-Link to default service readme
+# weave-service commands
+[Link to weave-service default README](./default-service/README.md)

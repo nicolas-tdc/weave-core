@@ -29,7 +29,7 @@ fi
 
 set_application_environment $1
 
-echo -e "\e[33mTrying to add services to application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
+echo -e "\e[33mTrying to add services to application '$APP_NAME'...\e[0m"
 
 # Add and configure services
 echo -e "\e[33mAdding and configuring services...\e[0m"
@@ -48,4 +48,4 @@ merge_gitignore_files \
     ".gitignore"
 
 # Success message
-echo -e "\e[32mDone adding services to '$APP_NAME' in '$APP_ENV' environment.\e[0m"
+echo -e "\e[32mDone adding services to '$APP_NAME'.\e[0m"

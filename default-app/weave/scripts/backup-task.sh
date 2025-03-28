@@ -21,7 +21,7 @@ fi
 
 set_application_environment $1
 
-echo -e "\e[33mTrying to backup application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
+echo -e "\e[33mTrying to backup application '$APP_NAME'...\e[0m"
 
 # Backup directory path input
 echo -e "Enter backup directory path (default: './backups'): \c"
@@ -38,4 +38,4 @@ export BACKUP_FILENAME="backup-$timestamp.tar.gz"
 
 execute_services_specific_script $SERVICES_DIRECTORY "backup-task.sh"
 
-echo -e "\e[32mApplication '$APP_NAME' updated in '$APP_ENV' environment.\e[0m"
+echo -e "\e[32mApplication '$APP_NAME' updated.\e[0m"

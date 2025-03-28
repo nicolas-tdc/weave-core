@@ -16,7 +16,7 @@ configure_weave_services() {
     # Add services
     while true; do
         # Keep or stop adding services
-        echo -e "\e[33mDo you want to add a weave service ? (yes/no): \c\e[0m"
+        echo -e "\e[94mDo you want to add a weave service ? (yes/no): \c\e[0m"
         read add_service
         
         if [ "$add_service" == "no" ]; then
@@ -35,7 +35,7 @@ configure_weave_services() {
         done
 
         # Select service
-        echo -e "\e[33mPlease select a service to add to your app:\e[0m"
+        echo -e "\e[94mPlease select a service to add to your app:\e[0m"
         select selected_service in "${available_services[@]}"; do
             if [[ -n $selected_service ]]; then
                 # Get the service name from the selected directory
@@ -49,7 +49,7 @@ configure_weave_services() {
 
         # Service name
         while true; do
-            echo -e "Enter your service's name (default: '$available_service_name'): \c"
+            echo -e "\e[94mEnter your service's name (default: '$available_service_name'):\e[0m"
             read service_name
             service_name=${service_name:-"$available_service_name"}
 
@@ -69,13 +69,11 @@ configure_weave_services() {
         rm -rf "$services_directory/$service_name/.git"
 
         # Format docker-compose files
-        for env in "dist" "prod" "staging" "dev"; do
-            compose_file="$services_directory/$service_name/docker-compose.yml.$env"
-            if [ -f "$compose_file" ]; then
-                echo -e "\e[33m$service_name: Formatting docker-compose.yml.$env file...\e[0m"
-                format_docker_compose $APP_NAME $service_name $compose_file
-            fi
-        done
+        compose_file="$services_directory/$service_name/docker-compose.yml"
+        if [ -f "$compose_file" ]; then
+            echo -e "\e[33m$service_name: Formatting docker-compose.yml file...\e[0m"
+            format_docker_compose $APP_NAME $service_name $compose_file
+        fi
 
         # Weave default files
         if [ -d "./default-service" ] && [ -d "$services_directory/$service_name" ]; then
@@ -85,91 +83,6 @@ configure_weave_services() {
         fi
 
         echo -e "\e[32mService $service_name added successfully.\e[0m"
-    done
-}
-
-configure_external_services() {
-    if [ -z "$1" ]; then
-        echo -e "\e[31mconfigure_services() - Error: First argument is required.\e[0m"
-        echo -e "\e[31musage: configure_services <services_directory>\e[0m"
-        exit 1
-    fi
-
-    services_directory=$1
-    git_shh_regex="^git@[a-zA-Z0-9.-]+:[^/]+/.+\.git$"
-
-    # Add services
-    while true; do # Keep or stop adding services
-        echo -e "\e[33mDo you want to add an external service ? (yes/no): \c\e[0m"
-        read add_service
-        
-        if [ "$add_service" == "no" ]; then
-            break;
-        elif ! [ "$add_service" == "yes" ]; then
-            echo -e "\e[31mInvalid input.\e[0m"
-            continue;
-        fi
-
-        # Service repository ssh address input
-        while true; do
-            echo -e "Enter your service's repository SSH address or 'done' to end services configuration: \c"
-            read service_repository
-
-            # Check for 'done' to exit the loop
-            if [ "$service_repository" == "done" ]; then
-                break 2  # Exit both loops if "done" is entered
-            fi
-
-            # Check for valid repository input
-            if [[ "$service_repository" =~ $git_shh_regex ]]; then
-                break  # Break the inner loop if valid input is provided
-            else
-                echo -e "\e[31mInvalid service repository input.\e[0m"
-            fi
-        done
-
-        # End services configuration
-        if [ "$service_repository" == "done" ]; then
-            break;
-        fi
-
-        # Service name
-        repository_name=$(basename "$service_repository" .git)
-        # Service name input
-        while true; do
-            echo -e "Enter your service's name (default: '$repository_name'): \c"
-            read service_name
-            service_name=${service_name:-"$repository_name"}
-
-            # Check if service directory already exists
-            if ! [ -d "./$services_directory/$service_name" ]; then
-                break;
-            fi
-
-            echo -e "\e[31mService name '$service_name' already used.\e[0m"
-            continue;
-        done
-
-        if [ -f "./default-app/weave/helpers/git.sh" ]; then
-            source ./default-app/weave/helpers/git.sh
-            select_remote_branch "$service_repository"
-
-            # Clone repository
-            echo -e "\e[33mCloning repository...\e[0m"
-            git clone --single-branch --branch "$SELECTED_BRANCH" "$service_repository" "$services_directory/$service_name"
-
-            # Remove git remote
-            rm -rf "$services_directory/$service_name/.git"
-
-            # Weave default files
-            if [ -d "./weave/default-service" ] && [ -d "$services_directory/$service_name" ]; then
-                # Copy default service files to service directory
-                sudo cp -r ./weave/default-service/* "$services_directory/$service_name"
-                sudo chmod -R 755 "$services_directory/$service_name"
-            fi
-
-            echo -e "\e[32mService $service_name added successfully.\e[0m"
-        fi
     done
 }
 

@@ -3,21 +3,15 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-if [ -z "$1" ]; then
-    service_name=$(basename "$PWD") > /dev/null 2>&1
+# Source utilities helpers
+if [ -f "./weave/helpers/utils.sh" ]; then
+    source ./weave/helpers/utils.sh
 else
-    service_name=$1
-fi
-
-echo -e "\e[32m-----Access $service_name-----\e[0m"
-
-# Load environment variables from the .env file
-if [ -f ".env" ]; then
-    source .env
-else
-    echo -e "\e[31m$service_name: No .env file found for logging ports available!\e[0m"
+    echo -e "\e[31mCannot find 'utils' file! Exiting...\e[0m"
     exit 1
 fi
+
+set_service_environment $1
 
 # Function to check if a string is a number
 is_number() {
@@ -35,12 +29,12 @@ for env_var in $(compgen -v); do
         if is_number "$env_var_value"; then
             if [[ "$env_var" == *"PORT"* && "$env_var" != *_PORT && "$env_var" != "PORT_"* ]]; then
                 # If the variable contains just "PORT"
-                echo -e "\e[32m$service_name: http://localhost:$env_var_value\e[0m"
+                echo -e "\e[32m$SERVICE_NAME: http://localhost:$env_var_value\e[0m"
             elif [[ "$env_var" == *_PORT || "$env_var" == "PORT_"* ]]; then
                 # If the variable contains "_PORT" or "PORT_"
                 subservice_name="${env_var//_PORT/}"
                 subservice_name="${subservice_name//PORT_/}"
-                echo -e "\e[32m$service_name:$subservice_name:http://localhost:$env_var_value\e[0m"
+                echo -e "\e[32m$SERVICE_NAME:$subservice_name:http://localhost:$env_var_value\e[0m"
             fi
         fi
     fi

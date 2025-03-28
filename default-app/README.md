@@ -1,11 +1,9 @@
-# APP_NAME
+# weave-application
 
-# Application specifications/requirements
-#   Add user to Docker group : sudo usermod -aG docker $USERs
-#   Logout & login
-
-# Scripts available with usage details
-
-./weave.sh run
-./weave.sh run <environment>
-...
+./weave.sh start
+./weave.sh stop
+./weave.sh update
+./weave.sh add-services
+./weave.sh backup-task
+./weave.sh backup-enable
+./weave.sh backup-disable

@@ -21,7 +21,7 @@ fi
 
 set_application_environment $1
 
-echo -e "\e[33mTrying to stop application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
+echo -e "\e[33mTrying to stop application '$APP_NAME'...\e[0m"
 
 # Required packages installation
 install_packages \
@@ -30,4 +30,4 @@ install_packages \
 
 execute_services_specific_script $SERVICES_DIRECTORY "stop.sh"
 
-echo -e "\e[32mApplication '$APP_NAME' stopped in '$APP_ENV' environment.\e[0m"
+echo -e "\e[32mApplication '$APP_NAME' stopped.\e[0m"

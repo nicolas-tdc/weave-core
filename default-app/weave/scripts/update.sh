@@ -29,7 +29,7 @@ fi
 
 set_application_environment $1
 
-echo -e "\e[33mTrying to update application '$APP_NAME' in '$APP_ENV' environment...\e[0m"
+echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
 
 # Required packages installation
 # # install_packages \
@@ -38,4 +38,4 @@ echo -e "\e[33mTrying to update application '$APP_NAME' in '$APP_ENV' environmen
 
 execute_services_specific_script $SERVICES_DIRECTORY "update.sh"
 
-echo -e "\e[32mApplication '$APP_NAME' updated in '$APP_ENV' environment.\e[0m"
+echo -e "\e[32mApplication '$APP_NAME' updated.\e[0m"

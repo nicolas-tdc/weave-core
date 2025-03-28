@@ -10,3 +10,9 @@
 [submodule "available-services/weave-navidrome"]
 	path = available-services/weave-navidrome
 	url = git@github.com:nicolas-tdc/weave-navidrome.git
+[submodule "available-services/weave-mongo"]
+	path = available-services/weave-mongo
+	url = git@github.com:nicolas-tdc/weave-mongo.git
+[submodule "available-services/weave-mongo-express"]
+	path = available-services/weave-mongo-express
+	url = git@github.com:nicolas-tdc/weave-mongo-express.git

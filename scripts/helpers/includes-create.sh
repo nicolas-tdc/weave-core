@@ -5,14 +5,6 @@ set -e
 
 echo -e "\e[32mLaunching application initialization...\e[0m"
 
-# Source common configuration helpers
-if [ -f "./scripts/helpers/config-common.sh" ]; then
-    source ./scripts/helpers/config-common.sh
-else
-    echo -e "\e[31mCannot find 'common' configuration file! Exiting...\e[0m"
-    exit 1
-fi
-
 # Source initial configuration helpers
 if [ -f "./scripts/helpers/config-create.sh" ]; then
     source ./scripts/helpers/config-create.sh
