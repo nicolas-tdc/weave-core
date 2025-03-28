@@ -10,8 +10,8 @@ Launch commands from root directory.
 ## Update weave and submodules.
 ./weave.sh update
 
-# weave-application commands
+# weave-application setup and commands
 [Link to weave-application default README](./default-app/README.md)
 
-# weave-service commands
+# weave-service setup and commands
 [Link to weave-service default README](./default-service/README.md)
