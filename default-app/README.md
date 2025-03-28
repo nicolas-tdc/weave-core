@@ -1,12 +1,14 @@
 # weave-application
 
-From application's root directory.
+__From application's root directory__
 
 ## Setup
 
 ```bash
 cp .env.dist .env
 ```
+
+__Setup services (see weave-service setup and commands)__
 
 ## Commands
 
@@ -47,4 +49,4 @@ cp .env.dist .env
 
 
 # weave-service setup and commands
-[Link to weave-service default README](./default-service/README.md)
+[Link to weave-service default README](../default-service/README.md)

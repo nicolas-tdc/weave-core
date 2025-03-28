@@ -1,14 +1,18 @@
 # weave
 
-# weave commands
+__Launch commands from root directory__
 
-Launch commands from root directory.
+## Commands
 
-## Create weave application
+- Create weave application
+```bash
 ./weave.sh create
+```
 
-## Update weave and submodules.
+- Update weave and submodules.
+```bash
 ./weave.sh update
+```
 
 # weave-application setup and commands
 [Link to weave-application default README](./default-app/README.md)
