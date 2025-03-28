@@ -2,21 +2,22 @@
 
 ## Setup
 
-**Copy environment file**
-*From application's root directory*
+- Copy environment file**
+
+**From application's root directory**
 ```bash
 cp .env.dist .env
 ```
 
-**Set environment variables**: edit copied .env file
+- Set environment variables: edit copied .env file
 
-**Setup services**: see instructions found in README.md files of your added services
+- Setup services: see instructions found in README.md files of your added services
 
 ## weave-service default setup and commands
 [weave-service README](./weave/default-service/README.md)
 
 ## Commands
-*From application's root directory*
+**From application's root directory**
 
 - Start application
 ```bash

@@ -2,13 +2,13 @@
 
 # Setup
 
-**Copy environment file**
-*From service's root directory*
+- Copy environment file
+**From service's root directory**
 ```bash
 cp .env.dist .env
 ```
 
-**Set environment variables**: edit copied .env file
+- Set environment variables: edit copied .env file
 
 # Commands
 *From service's root directory*
