@@ -2,7 +2,7 @@
 
 ## Setup
 
-- Copy environment file**
+- Copy environment file
 
 **From application's root directory**
 ```bash
@@ -13,8 +13,7 @@ cp .env.dist .env
 
 - Setup services: see instructions found in README.md files of your added services
 
-## weave-service default setup and commands
-[weave-service README](./weave/default-service/README.md)
+[weave-service default README](./weave/default-service/README.md)
 
 ## Commands
 **From application's root directory**

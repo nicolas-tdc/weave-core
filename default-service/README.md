@@ -3,6 +3,7 @@
 # Setup
 
 - Copy environment file
+
 **From service's root directory**
 ```bash
 cp .env.dist .env
