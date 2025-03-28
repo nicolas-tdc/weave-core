@@ -1,16 +1,22 @@
 # weave-application
 
-**From application's root directory**
-
 ## Setup
 
+**Copy environment file**
+*From application's root directory*
 ```bash
 cp .env.dist .env
 ```
 
-**Setup services (see weave-service setup and commands)**
+**Set environment variables**: edit copied .env file
+
+**Setup services**: see instructions found in README.md files of your added services
+
+## weave-service default setup and commands
+[weave-service README](./weave/default-service/README.md)
 
 ## Commands
+*From application's root directory*
 
 - Start application
 ```bash
@@ -46,7 +52,3 @@ cp .env.dist .env
 ```bash
 ./weave.sh backup-disable
 ```
-
-
-# weave-service setup and commands
-[Link to weave-service default README](../default-service/README.md)
