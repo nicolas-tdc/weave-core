@@ -12,7 +12,7 @@ cp .env.dist .env
 - Set environment variables: edit copied .env file
 
 # Commands
-*From service's root directory*
+**From service's root directory**
 
 - Start service
 ```bash

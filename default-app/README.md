@@ -13,7 +13,7 @@ cp .env.dist .env
 
 - Setup services: see instructions found in README.md files of your added services
 
-[weave-service default README](./weave/default-service/README.md)
+[See weave-service default setup and commands](./weave/default-service/README.md)
 
 ## Commands
 **From application's root directory**
