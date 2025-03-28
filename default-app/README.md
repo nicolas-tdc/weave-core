@@ -1,6 +1,6 @@
 # weave-application
 
-__From application's root directory__
+**From application's root directory**
 
 ## Setup
 
@@ -8,7 +8,7 @@ __From application's root directory__
 cp .env.dist .env
 ```
 
-__Setup services (see weave-service setup and commands)__
+**Setup services (see weave-service setup and commands)**
 
 ## Commands
 

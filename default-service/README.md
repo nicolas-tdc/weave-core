@@ -1,6 +1,6 @@
 # weave-service
 
-__From service's root directory__
+**From service's root directory**
 
 # Setup
 

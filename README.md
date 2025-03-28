@@ -1,15 +1,17 @@
 # weave
 
-__Launch commands from root directory__
+Weave is a light bash framework allows to easily aggregate and run services as a single application.
 
 ## Commands
+
+**From weave root directory**
 
 - Create weave application
 ```bash
 ./weave.sh create
 ```
 
-- Update weave and submodules.
+- Update weave and services' submodules.
 ```bash
 ./weave.sh update
 ```
