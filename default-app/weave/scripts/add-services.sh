@@ -32,5 +32,4 @@ merge_gitignore_files \
     "$SERVICES_DIRECTORY" \
     ".gitignore"
 
-# Success message
 echo -e "\e[32mDone adding services to '$APP_NAME'.\e[0m"

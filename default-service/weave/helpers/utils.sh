@@ -47,7 +47,5 @@ install_packages() {
             fi
         done
         sudo apt autoremove
-    else
-        echo -e "\e[32mAll packages are already installed.\e[0m"
     fi
 }

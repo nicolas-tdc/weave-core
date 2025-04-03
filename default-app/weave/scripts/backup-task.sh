@@ -3,6 +3,8 @@
 # Exit immediately if a command fails
 set -e
 
+# This script is used to backup the application and its services.
+
 # Source services helpers
 if [ -f "./weave/helpers/services.sh" ]; then
     source ./weave/helpers/services.sh
@@ -22,21 +24,23 @@ backup_directory=${backup_directory:-"./backups"}
 echo -e "\e[33mCreating backup directory...\e[0m"
 mkdir -p $backup_directory
 
-# Set backup variables
+# Set backup name and temporary directory
 timestamp=$(date +"%Y%m%d-%H%M%S")
 backup_name="backup-$timestamp"
-
 backup_temp_dir=$(mktemp -d)
 
 if [ -z "$1" ]; then
+    # Execute the backup command on all services
     echo -e "\e[33mTrying to backup-task application '$APP_NAME'...\e[0m"
     execute_command_on_all_services $SERVICES_DIRECTORY "backup-task" $backup_temp_dir
 else
+    # Execute the backup command on a specific service
     service_name=$1
     echo -e "\e[33mTrying to backup-task service '$service_name'...\e[0m"
     execute_command_on_specific_service $SERVICES_DIRECTORY "backup-task" $service_name $backup_temp_dir
 fi
 
+# Create a tarball of the backup
 tar -czvf $backup_directory/$backup_name.tar.gz -C "$backup_temp_dir" .
 rm -rf "$backup_temp_dir"
 

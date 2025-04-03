@@ -3,6 +3,8 @@
 # Exit immediately if a command fails
 set -e
 
+# This script is used to update the application and its services.
+
 # Source docker helpers
 if [ -f "./weave/helpers/docker.sh" ]; then
     source ./weave/helpers/docker.sh
@@ -19,12 +21,12 @@ else
     exit 1
 fi
 
-echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
-
 if [ -z "$1" ]; then
+    # Execute the update command on all services
     echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
     execute_command_on_all_services $SERVICES_DIRECTORY "update"
 else
+    # Execute the update command on a specific service
     service_name=$1
     echo -e "\e[33mTrying to update service '$service_name'...\e[0m"
     execute_command_on_specific_service $SERVICES_DIRECTORY "update" $service_name

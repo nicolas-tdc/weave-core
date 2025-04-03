@@ -3,6 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# This script is used to update the Weave framework.
+
 echo -e "\e[32mUpdating weave...\e[0m"
 
 git pull origin main
