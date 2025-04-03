@@ -3,16 +3,6 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Source utilities helpers
-if [ -f "./weave/helpers/utils.sh" ]; then
-    source ./weave/helpers/utils.sh
-else
-    echo -e "\e[31mCannot find 'utils' file! Exiting...\e[0m"
-    exit 1
-fi
-
-set_service_environment $1
-
 # Function to check if a string is a number
 is_number() {
     [[ "$1" =~ ^[0-9]+$ ]] && return 0 || return 1
