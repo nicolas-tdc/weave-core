@@ -52,3 +52,11 @@ else
     echo -e "\e[31mCannot find default application services file! Exiting...\e[0m"
     exit 1
 fi
+
+# Source service utilities helpers
+if [ -f "./default-service/weave/helpers/utils.sh" ]; then
+    source ./default-service/weave/helpers/utils.sh
+else
+    echo -e "\e[31mCannot find default service utilities file! Exiting...\e[0m"
+    exit 1
+fi

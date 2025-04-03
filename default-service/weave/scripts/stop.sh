@@ -11,6 +11,8 @@ else
     exit 1
 fi
 
+setup_docker
+
 # Stopping existing containers
 echo -e "\e[33m$SERVICE_NAME: Stopping existing containers...\e[0m"
 docker-compose down

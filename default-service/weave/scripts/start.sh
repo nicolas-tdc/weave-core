@@ -7,12 +7,13 @@ set -e
 if [ -f "./weave/helpers/docker.sh" ]; then
     source ./weave/helpers/docker.sh
 else
-    echo -e "\e[31m$SERVICE_NAME: Cannot find 'docker' file! Exiting...\e[0m"
+    echo -e "\e[31m$SERVICE_NAME: Cannot find 'docker' helper file! Exiting...\e[0m"
     exit 1
 fi
 
 echo -e "\e[33m$SERVICE_NAME: Trying to start...\e[0m"
 
+setup_docker
 create_networks
 
 # Stopping existing containers

@@ -11,11 +11,6 @@ else
     exit 1
 fi
 
-# Required packages installation
-install_packages \
-    docker \
-    docker-compose
-
 if [ -z "$1" ]; then
     echo -e "\e[33mTrying to stop application '$APP_NAME'...\e[0m"
     execute_command_on_all_services $SERVICES_DIRECTORY "stop"

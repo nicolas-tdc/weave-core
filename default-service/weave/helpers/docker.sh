@@ -3,6 +3,19 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+setup_docker() {
+    # Check if the docker-compose file exists
+    if [[ ! -f "docker-compose.yml" ]]; then
+        echo -e "\e[31m$SERVICE_NAME: No docker-compose.yml file...\e[0m"
+        exit 1
+    fi
+
+    # Required packages installation
+    install_packages \
+        docker \
+        docker-compose
+}
+
 # Function to find application's or service's networks
 find_networks() {
     if [ -z "$1" ]; then
