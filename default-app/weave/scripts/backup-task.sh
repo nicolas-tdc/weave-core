@@ -36,22 +36,18 @@ mkdir -p $backup_directory
 timestamp=$(date +"%Y%m%d-%H%M%S")
 backup_name="backup-$timestamp"
 
-export BACKUP_TEMP_DIR=$(mktemp -d)
+backup_temp_dir=$(mktemp -d)
 
 if [ -z "$1" ]; then
     echo -e "\e[33mTrying to backup-task application '$APP_NAME'...\e[0m"
-    execute_command_on_all_services $SERVICES_DIRECTORY "backup-task"
+    execute_command_on_all_services $SERVICES_DIRECTORY "backup-task" $backup_temp_dir
 else
     service_name=$1
     echo -e "\e[33mTrying to backup-task service '$service_name'...\e[0m"
-    execute_command_on_specific_service $SERVICES_DIRECTORY "backup-task" $service_name
+    execute_command_on_specific_service $SERVICES_DIRECTORY "backup-task" $service_name $backup_temp_dir
 fi
 
-
-# Step 3: Compress the temporary directory into a .tar.gz archive
-tar -czvf $backup_directory/$backup_name.tar.gz -C "$BACKUP_TEMP_DIR" .
-
-# Step 4: Remove the temporary directory
-rm -rf "$BACKUP_TEMP_DIR"
+tar -czvf $backup_directory/$backup_name.tar.gz -C "$backup_temp_dir" .
+rm -rf "$backup_temp_dir"
 
 echo -e "\e[32mApplication '$APP_NAME' updated.\e[0m"
