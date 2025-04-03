@@ -27,7 +27,7 @@ else
     exit 1
 fi
 
-set_application_environment $1
+set_application_environment
 
 echo -e "\e[33mTrying to add services to application '$APP_NAME'...\e[0m"
 
@@ -35,11 +35,6 @@ echo -e "\e[33mTrying to add services to application '$APP_NAME'...\e[0m"
 echo -e "\e[33mAdding and configuring services...\e[0m"
 # Weave services
 configure_weave_services "$SERVICES_DIRECTORY" "./weave/available-services"
-# Required packages installation
-install_packages \
-    git
-# External services
-configure_external_services "$SERVICES_DIRECTORY"
 
 # Merge gitignore files
 echo -e "\e[33mMerging gitignore files...\e[0m"

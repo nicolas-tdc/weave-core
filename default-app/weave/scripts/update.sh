@@ -27,15 +27,17 @@ else
     exit 1
 fi
 
-set_application_environment $1
+set_application_environment
 
 echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
 
-# Required packages installation
-# # install_packages \
-#     git
-# @todo: git pull
-
-execute_services_specific_script $SERVICES_DIRECTORY "update.sh"
+if [ -z "$1" ]; then
+    echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
+    execute_command_on_all_services $SERVICES_DIRECTORY "update"
+else
+    service_name=$1
+    echo -e "\e[33mTrying to update service '$service_name'...\e[0m"
+    execute_command_on_specific_service $SERVICES_DIRECTORY "update" $service_name
+fi
 
 echo -e "\e[32mApplication '$APP_NAME' updated.\e[0m"

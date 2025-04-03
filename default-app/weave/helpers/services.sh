@@ -86,23 +86,54 @@ configure_weave_services() {
     done
 }
 
-execute_services_specific_script() {
+execute_command_on_all_services() {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "\e[31mexecute_services_specific_script() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: execute_services_specific_script <services_directory> <script_name>\e[0m"
+        echo -e "\e[execute_command_on_all_services() - Error: First and second argument are required.\e[0m"
+        echo -e "\e[31musage: execute_command_on_all_services <services_directory> <command_name>\e[0m"
         exit 1
     fi
 
     services_directory=$1
-    script_name=$2
+    command_name=$2
 
-    # Stop all services
+    shift 2
+
+    service_command_args=("$@")
+
     for service_path in $services_directory/*/; do
         # Check if it's a directory
-        if [ -d "$service_path" ] && [ -f "${service_path}weave/scripts/$script_name" ]; then
+        if [ -d "$service_path" ] && [ -f "${service_path}weave.sh" ]; then
             cd "$service_path"
-            "weave/scripts/$script_name"
+            ./weave.sh "$command_name" "${service_command_args[@]}"
             cd - > /dev/null 2>&1
         fi
     done
+}
+
+execute_command_on_specific_service() {
+    if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+        echo -e "\e[31mexecute_command_on_specific_service() - Error: First and second argument are required.\e[0m"
+        echo -e "\e[31musage: execute_command_on_specific_service <services_directory> <command_name> <service_name>\e[0m"
+        exit 1
+    fi
+
+    services_directory=$1
+    command_name=$2
+    service_name=$3
+
+    shift 3
+    
+    service_command_args=("$@")
+
+    service_path="$services_directory/$service_name"
+
+    # Execute command on the specific service
+    if [ -d "$service_path" ] && [ -f "${service_path}weave.sh" ]; then
+        cd "$service_path"
+        ./weave.sh "$command_name" "${service_command_args[@]}"
+        cd - > /dev/null 2>&1
+    else
+        echo -e "\e[31mService '$service_name' does not exist.\e[0m"
+        exit 1
+    fi
 }

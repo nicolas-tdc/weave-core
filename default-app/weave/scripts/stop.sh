@@ -19,15 +19,20 @@ else
     exit 1
 fi
 
-set_application_environment $1
-
-echo -e "\e[33mTrying to stop application '$APP_NAME'...\e[0m"
+set_application_environment
 
 # Required packages installation
 install_packages \
     docker \
     docker-compose
 
-execute_services_specific_script $SERVICES_DIRECTORY "stop.sh"
+if [ -z "$1" ]; then
+    echo -e "\e[33mTrying to stop application '$APP_NAME'...\e[0m"
+    execute_command_on_all_services $SERVICES_DIRECTORY "stop"
+else
+    service_name=$1
+    echo -e "\e[33mTrying to stop service '$service_name'...\e[0m"
+    execute_command_on_specific_service $SERVICES_DIRECTORY "stop" $service_name
+fi
 
 echo -e "\e[32mApplication '$APP_NAME' stopped.\e[0m"
