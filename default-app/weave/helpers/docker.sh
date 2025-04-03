@@ -6,18 +6,16 @@ set -e
 format_docker_compose() {
     if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
         echo -e "\e[31mformat_docker_compose() - Error: Three arguments are required.\e[0m"
-        echo -e "\e[31musage: format_docker_compose <application_name> <service_name> <compose_file>\e[0m"
+        echo -e "\e[31musage: format_docker_compose <service_name> <compose_file> <network_name>\e[0m"
         exit 1
     fi
 
-    app_name=$1
-    service_name=$2
-    compose_file=$3
-
-    network_name="${app_name}_network"
-    app_env_file_path="../../.env"
+    service_name=$1
+    compose_file=$2
+    network_name=$3
 
     # Ensure the application env file is added
+    app_env_file_path="../../.env"
     if ! grep -q "$app_env_file_path" "$compose_file"; then
         sed -i '/env_file:/a\ \ \ \ \ \ - '"$app_env_file_path" "$compose_file"
     fi

@@ -72,7 +72,7 @@ configure_weave_services() {
         compose_file="$services_directory/$service_name/docker-compose.yml"
         if [ -f "$compose_file" ]; then
             echo -e "\e[33m$service_name: Formatting docker-compose.yml file...\e[0m"
-            format_docker_compose $APP_NAME $service_name $compose_file
+            format_docker_compose $service_name $compose_file "${APP_NAME}_network"
         fi
 
         # Weave default files
