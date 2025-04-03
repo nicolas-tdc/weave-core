@@ -3,6 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+if [ -z "$3" ]; then
+    echo -e "\e[31mToo many arguments. Exiting...\e[0m"
+    echo "Usage: ./weave.sh {start|stop|update|add-services|backup-task|backup-enable|backup-disable}"
+    exit 1
+fi
+
 (
     # Exectue from application root
     cd "$(dirname "$0")"
@@ -26,6 +32,7 @@ set -e
     backup-enable) ./weave/scripts/backup-enable.sh;;
     backup-disable) ./weave/scripts/backup-disable.sh;;
     *)
+        echo -e "\e[31mInvalid or missing argument. Exiting...\e[0m"
         echo "Usage: ./weave.sh {start|stop|update|add-services|backup-task|backup-enable|backup-disable}"
         exit 1
         ;;
