@@ -3,6 +3,8 @@
 # Exit immediately if a command fails
 set -e
 
+# This script is used to start the service
+
 # Source docker helpers
 if [ -f "./weave/helpers/docker.sh" ]; then
     source ./weave/helpers/docker.sh
@@ -13,17 +15,23 @@ fi
 
 echo -e "\e[33m$SERVICE_NAME: Trying to start...\e[0m"
 
-setup_docker
+# Prepare docker
+echo -e "\e[33m$SERVICE_NAME: Preparing docker...\e[0m"
+check_docker
 create_networks
+echo -e "\e[31m$SERVICE_NAME: Docker is ready.\e[0m"]
 
-# Stopping existing containers
+# Stop existing containers
 echo -e "\e[33m$SERVICE_NAME: Stopping existing containers...\e[0m"
 docker-compose down > /dev/null 2>&1
+echo -e "\e[31m$SERVICE_NAME: Stopped existing containers.\e[0m"
 
-# Building and starting containers
+# Build and start containers
 echo -e "\e[33m$SERVICE_NAME: Building and starting container...\e[0m"
 docker-compose up --build --remove-orphans -d
+echo -e "\e[31m$SERVICE_NAME: Container started.\e[0m"
 
-# Cleaning up unused Docker images
+# Clean up unused Docker images
 echo -e "\e[33m$SERVICE_NAME: Cleaning up unused Docker images...\e[0m"
 docker system prune -af
+echo -e "\e[31m$SERVICE_NAME: Unused Docker images cleaned up.\e[0m"

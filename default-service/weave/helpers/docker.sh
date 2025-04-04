@@ -3,10 +3,17 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-setup_docker() {
+# This script provides docker related functions for a weave service.
+
+# Function: check_docker
+# Purpose: Check if docker packages and necessary files are found
+# Arguments: None
+# Returns: 0 if successful, 1 if docker-compose.yml is not found
+# Usage: check_docker
+check_docker() {
     # Check if the docker-compose file exists
     if [[ ! -f "docker-compose.yml" ]]; then
-        echo -e "\e[31m$SERVICE_NAME: No docker-compose.yml file...\e[0m"
+        echo -e "\e[31mNo docker-compose.yml file found in service...\e[0m"
         exit 1
     fi
 
@@ -16,7 +23,11 @@ setup_docker() {
         docker-compose
 }
 
-# Function to find application's or service's networks
+# Function: find_networks
+# Purpose: Find networks defined in the docker-compose file
+# Arguments: $1 - Optional path to the docker-compose file
+# Returns: List of networks
+# Usage: find_networks [docker-compose-file]
 find_networks() {
     if [ -z "$1" ]; then
         compose_file="docker-compose.yml"
@@ -27,7 +38,11 @@ find_networks() {
     awk '/networks:/ {getline; print $1}' "$compose_file" | sed 's/://g' | sort -u
 }
 
-# Function to create networks
+# Function: create_networks
+# Purpose: Create networks defined in the docker-compose file
+# Arguments: $1 - Optional path to the docker-compose file
+# Returns: None
+# Usage: create_networks [docker-compose-file]
 create_networks() {
     networks=$(find_networks "$1")
     
@@ -40,7 +55,11 @@ create_networks() {
     done
 }
 
-# Function to remove networks
+# Function: remove_networks
+# Purpose: Remove networks defined in the docker-compose file
+# Arguments: $1 - Optional path to the docker-compose file
+# Returns: None
+# Usage: remove_networks [docker-compose-file]
 remove_networks() {
     networks=$(find_networks $1)
 

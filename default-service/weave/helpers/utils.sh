@@ -3,6 +3,13 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# This script provides utility helper functions for a weave service.
+
+# Function: set_service_environment
+# Purpose: Set the service environment variables
+# Arguments: None
+# Returns: None
+# Usage: set_service_environment
 set_service_environment() {
     export SERVICE_NAME=$(basename "$PWD") > /dev/null 2>&1
 
@@ -15,9 +22,13 @@ set_service_environment() {
     source .env
 }
 
-# This function installs apt packages listed as function arguments
-# usage :
-# install_packages <first-package> <second-package> ...
+# Function: install_packages
+# Purpose: Install required packages if not already installed
+# Arguments:
+#   $@ - List of package names to check and install
+# Returns: None
+# Usage:
+#   install_packages <package1> <package2> ...
 install_packages() {
     # Define required packages
     packages=("$@")
@@ -48,4 +59,16 @@ install_packages() {
         done
         sudo apt autoremove
     fi
+}
+
+# Function: is_number
+# Purpose: Check if a string is a number
+# Arguments:
+#   $1 - The string to check
+# Returns:
+#   0 if the string is a number, 1 otherwise
+# Usage:
+#   is_number <input_string>
+is_number() {
+    [[ "$1" =~ ^[0-9]+$ ]] && return 0 || return 1
 }

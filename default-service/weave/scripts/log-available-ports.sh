@@ -3,16 +3,13 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Function to check if a string is a number
-is_number() {
-    [[ "$1" =~ ^[0-9]+$ ]] && return 0 || return 1
-}
+# This script is used to log available ports for a weave service.
 
 # Iterate over all environment variables
 for env_var in $(compgen -v); do
-    # Check if the variable name contains "PORT"
+
     if [[ "$env_var" =~ PORT ]]; then
-        # Get the value of the variable
+        # Get the value of the port variable
         env_var_value=${!env_var}
 
         # Check if the value is a number
