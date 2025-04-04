@@ -8,7 +8,7 @@ set -e
 echo -e "\e[33mTrying to enable backup cron job for application '$APP_NAME'...\e[0m"
 
 # Ask for the backup time gap (in seconds)
-echo "Please enter the backup time gap in seconds:"
+echo -e "\e[94mPlease enter the backup time gap in seconds:\c\e[0m"
 read backup_timegap
 
 # Check if cron job already exists, and remove it if necessary

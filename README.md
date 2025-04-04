@@ -1,6 +1,6 @@
 # weave
 
-Weave is a light bash framework that provides commands to easily aggregate and run services as a single application
+weave is a light bash framework that provides commands to easily aggregate and run services as a single application
 
 ## Commands
 **From weave root directory**

@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script is used to create a Weave application.
+# This script is used to create a weave application.
 
 echo -e "\e[33mTrying to create weave application...\e[0m"
 
@@ -18,7 +18,7 @@ fi
 # Check default files
 echo -e "\e[33mChecking weave default files...\e[0m"
 check_default_files
-echo -e "\e[32mWeave default files found.\e[0m"
+echo -e "\e[32mweave default files found.\e[0m"
 
 # Required packages installation
 echo -e "\e[33mInstalling required packages...\e[0m"
@@ -74,4 +74,4 @@ sudo chmod -R 755 ./
 sudo chown -R $USER:$USER ./
 echo -e "\e[32mPermissions set successfully.\e[0m"
 
-echo -e "\e[32mWeave application created.\e[0m"
+echo -e "\e[32mweave application created.\e[0m"

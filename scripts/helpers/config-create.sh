@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script provides functions to create and configure a new Weave application directory.
+# This script provides functions to create and configure a new weave application directory.
 
 # Function: configure_name
 # Purpose: Prompt user for application name and set it to a default value if not provided

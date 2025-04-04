@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script is used to to manage a Weave application.
+# This script is used to to manage a weave application.
 
 # Check for the correct number of arguments
 if ! [ -z "$3" ]; then

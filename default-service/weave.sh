@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script is used to manage a Weave application's service.
+# This script is used to manage a weave application's service.
 
 (
     # Exectue from application root

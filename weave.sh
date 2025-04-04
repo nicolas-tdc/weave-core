@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script is used to create a Weave project or update Weave framework.
+# This script is used to create a weave project or update weave framework.
 # It takes one argument: the action to perform (create or update).
 # Usage: ./weave.sh {create|update}
 

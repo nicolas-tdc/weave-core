@@ -3,6 +3,16 @@
 # Exit immediately if a command fails
 set -e
 
+# This script contains helper functions for managing weave services.
+
+# Function: configure_weave_services
+# Purpose: Configures weave services by adding them to the specified directory and formatting their Docker Compose files.
+# Arguments:
+#   1. services_directory: The directory where the services will be added.
+#   2. weave_services_directory: The directory containing available weave services.
+# Returns:
+#   None
+# Usage: configure_weave_services <services_directory> <weave_services_directory>
 configure_weave_services() {
     if [ -z "$1" ] || [ -z "$2" ]; then
         echo -e "\e[31mconfigure_weave_services() - Error: First and second argument are required.\e[0m"
@@ -10,8 +20,8 @@ configure_weave_services() {
         exit 1
     fi
 
-    services_directory=$1
-    weave_services_directory=$2
+    local services_directory=$1
+    local weave_services_directory=$2
 
     # Add services
     while true; do
@@ -27,7 +37,7 @@ configure_weave_services() {
         fi
 
         # Get available services list
-        available_services=()
+        local available_services=()
         for service_dir in "$weave_services_directory"/*; do
             if [ -d "$service_dir" ]; then
                 available_services+=("$(basename "$service_dir")")
@@ -39,7 +49,7 @@ configure_weave_services() {
         select selected_service in "${available_services[@]}"; do
             if [[ -n $selected_service ]]; then
                 # Get the service name from the selected directory
-                available_service_name=$(basename "$selected_service")
+                local available_service_name=$(basename "$selected_service")
 
                 break;
             else
@@ -51,7 +61,7 @@ configure_weave_services() {
         while true; do
             echo -e "\e[94mEnter your service's name (default: '$available_service_name'):\e[0m"
             read service_name
-            service_name=${service_name:-"$available_service_name"}
+            local service_name=${service_name:-"$available_service_name"}
 
             # Check if service directory already exists
             if ! [ -d "./$services_directory/$service_name" ]; then
@@ -69,13 +79,13 @@ configure_weave_services() {
         rm -rf "$services_directory/$service_name/.git"
 
         # Format docker-compose files
-        compose_file="$services_directory/$service_name/docker-compose.yml"
+        local compose_file="$services_directory/$service_name/docker-compose.yml"
         if [ -f "$compose_file" ]; then
             echo -e "\e[33m$service_name: Formatting docker-compose.yml file...\e[0m"
             format_docker_compose $service_name $compose_file "${APP_NAME}_network"
         fi
 
-        # Weave default files
+        # weave default files
         if [ -d "./default-service" ] && [ -d "$services_directory/$service_name" ]; then
             # Copy default service files to service's directory
             sudo cp -r ./default-service/* "$services_directory/$service_name"
@@ -86,6 +96,15 @@ configure_weave_services() {
     done
 }
 
+# Function: execute_command_on_all_services
+# Purpose: Executes a command on all services in the specified directory.
+# Arguments:
+#   1. services_directory: The directory containing the services.
+#   2. command_name: The name of the command to execute.
+#   @. service_command_args: Additional arguments for the service command.
+# Returns:
+#   None
+# Usage: execute_command_on_all_services <services_directory> <command_name> [<service_command_args>...]
 execute_command_on_all_services() {
     if [ -z "$1" ] || [ -z "$2" ]; then
         echo -e "\e[execute_command_on_all_services() - Error: First and second argument are required.\e[0m"
@@ -93,12 +112,12 @@ execute_command_on_all_services() {
         exit 1
     fi
 
-    services_directory=$1
-    command_name=$2
-
+    local services_directory=$1
+    local command_name=$2
     shift 2
 
-    service_command_args=("$@")
+    # Additional arguments for the service command
+    local service_command_args=("$@")
 
     for service_path in $services_directory/*/; do
         # Check if it's a directory
@@ -110,6 +129,16 @@ execute_command_on_all_services() {
     done
 }
 
+# Function: execute_command_on_specific_service
+# Purpose: Executes a command on a specific service in the specified directory.
+# Arguments:
+#   1. services_directory: The directory containing the services.
+#   2. command_name: The name of the command to execute.
+#   3. service_name: The name of the service to execute the command on.
+#   @. service_command_args: Additional arguments for the service command.
+# Returns:
+#   None
+# Usage: execute_command_on_specific_service <services_directory> <command_name> <service_name> [<service_command_args>...]
 execute_command_on_specific_service() {
     if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
         echo -e "\e[31mexecute_command_on_specific_service() - Error: First and second argument are required.\e[0m"
@@ -117,15 +146,15 @@ execute_command_on_specific_service() {
         exit 1
     fi
 
-    services_directory=$1
-    command_name=$2
-    service_name=$3
-
+    local services_directory=$1
+    local command_name=$2
+    local service_name=$3
     shift 3
     
-    service_command_args=("$@")
+    # Additional arguments for the service command
+    local service_command_args=("$@")
 
-    service_path="$services_directory/$service_name"
+    local service_path="$services_directory/$service_name"
 
     # Execute command on the specific service
     if [ -d "$service_path" ] && [ -f "${service_path}weave.sh" ]; then
@@ -133,7 +162,7 @@ execute_command_on_specific_service() {
         ./weave.sh "$command_name" "${service_command_args[@]}"
         cd - > /dev/null 2>&1
     else
-        echo -e "\e[31mService '$service_name' does not exist.\e[0m"
+        echo -e "\e[31mService '$service_name' not found or missing main weave script.\e[0m"
         exit 1
     fi
 }

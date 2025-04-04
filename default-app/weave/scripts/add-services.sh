@@ -23,7 +23,7 @@ echo -e "\e[33mTrying to add services to application '$APP_NAME'...\e[0m"
 
 # Add and configure services
 echo -e "\e[33mAdding and configuring services...\e[0m"
-# Weave services
+# weave services
 configure_weave_services "$SERVICES_DIRECTORY" "./weave/available-services"
 
 # Merge gitignore files

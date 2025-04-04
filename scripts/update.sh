@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# This script is used to update the Weave framework.
+# This script is used to update the weave framework.
 
 echo -e "\e[32mUpdating weave...\e[0m"
 

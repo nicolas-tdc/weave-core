@@ -3,6 +3,15 @@
 # Exit immediately if a command fails
 set -e
 
+# This script contains Docker related helper functions.
+
+# Function: format_docker_compose
+# Purpose: Formats a Docker Compose file by ensuring that each service has a unique container name and is connected to the specified network.
+# Arguments:
+#   1. service_name: The name of the service to be formatted.
+#   2. compose_file: The path to the Docker Compose file to be formatted.
+#   3. network_name: The name of the network to which the service should be connected.
+# Usage: format_docker_compose <service_name> <compose_file> <network_name>
 format_docker_compose() {
     if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
         echo -e "\e[31mformat_docker_compose() - Error: Three arguments are required.\e[0m"
@@ -10,12 +19,12 @@ format_docker_compose() {
         exit 1
     fi
 
-    service_name=$1
-    compose_file=$2
-    network_name=$3
+    local service_name=$1
+    local compose_file=$2
+    local network_name=$3
 
     # Ensure the application env file is added
-    app_env_file_path="../../.env"
+    local app_env_file_path="../../.env"
     if ! grep -q "$app_env_file_path" "$compose_file"; then
         sed -i '/env_file:/a\ \ \ \ \ \ - '"$app_env_file_path" "$compose_file"
     fi
@@ -74,13 +83,6 @@ format_docker_compose() {
         next
     }
     inside_service_volumes && !/^[[:space:]]{6}-/ { inside_service_volumes=0 }
-
-    # Modify the ME_CONFIG_MONGODB_SERVER value
-    inside_service && /^[[:space:]]{6}ME_CONFIG_MONGODB_SERVER:/ {
-        gsub(/mongo/, container_name "_mongo")
-        print
-        next
-    }
 
     { print }
 
