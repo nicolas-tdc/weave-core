@@ -1,0 +1,15 @@
+[submodule "available-services/javalin"]
+	path = available-services/javalin
+	url = git@github.com:nicolas-tdc/weave-javalin.git
+[submodule "available-services/vanillajs"]
+	path = available-services/vanillajs
+	url = git@github.com:nicolas-tdc/weave-vanillajs.git
+[submodule "available-services/navidrome"]
+	path = available-services/navidrome
+	url = git@github.com:nicolas-tdc/weave-navidrome.git
+[submodule "available-services/mongo-express"]
+	path = available-services/mongo-express
+	url = git@github.com:nicolas-tdc/weave-mongo-express.git
+[submodule "available-services/mongo"]
+	path = available-services/mongo
+	url = git@github.com:nicolas-tdc/weave-mongo.git
