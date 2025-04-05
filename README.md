@@ -1,6 +1,7 @@
 # weave-core
 
 This is not meant for direct usage.
+
 See [weave](https://github.com/nicolas-tdc/weave)
 
 ## Available services
