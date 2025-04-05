@@ -26,8 +26,11 @@ merge_gitignore_files() {
         echo "# Application specifics" > "$output_gitignore"
         echo ".env" >> "$output_gitignore"
         echo "" >> "$output_gitignore"
+        echo "" >> "$output_gitignore"
+        echo "# Services specifics" >> "$output_gitignore"
     fi
-    echo "# Services specifics" >> "$output_gitignore"
+
+    echo "" >> "$output_gitignore"
 
     # Collect child .gitignore entries and append to parent .gitignore
     {
