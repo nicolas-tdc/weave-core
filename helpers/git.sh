@@ -21,15 +21,12 @@ merge_gitignore_files() {
     local services_directory=$1
     local output_gitignore=$2
 
-    # Create the .gitignore file with header sections
-    if ! [ -f "$output_gitignore" ]; then
-        echo "# Application specifics" > "$output_gitignore"
-        echo ".env" >> "$output_gitignore"
-        echo "" >> "$output_gitignore"
-        echo "" >> "$output_gitignore"
-        echo "# Services specifics" >> "$output_gitignore"
+    if [ ! -f "$output_gitignore" ]; then
+        echo -e "\e[31mmerge_gitignore_files() - Error: Output .gitignore file does not exist.\e[0m"
+        exit 1
     fi
 
+    echo "" >> "$output_gitignore"
     echo "" >> "$output_gitignore"
 
     # Collect child .gitignore entries and append to parent .gitignore
