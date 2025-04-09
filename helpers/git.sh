@@ -22,12 +22,10 @@ merge_gitignore_files() {
     local output_gitignore=$2
 
     if [ ! -f "$output_gitignore" ]; then
-        echo -e "\e[31mmerge_gitignore_files() - Error: Output .gitignore file does not exist.\e[0m"
-        exit 1
+        touch $output_gitignore
+    else
+        echo "" >> "$output_gitignore"
     fi
-
-    echo "" >> "$output_gitignore"
-    echo "" >> "$output_gitignore"
 
     # Collect child .gitignore entries and append to parent .gitignore
     {
