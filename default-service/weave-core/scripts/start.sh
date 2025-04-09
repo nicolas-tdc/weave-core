@@ -6,16 +6,16 @@ set -e
 # This script is used to start the service
 
 # Source utilities helpers
-if [ -f "./weave/helpers/utils.sh" ]; then
-    source ./weave/helpers/utils.sh
+if [ -f "./weave-core/helpers/utils.sh" ]; then
+    source ./weave-core/helpers/utils.sh
 else
     echo -e "\e[31m$SERVICE_NAME: Cannot find 'utils' helper file. Exiting...\e[0m"
     exit 1
 fi
 
 # Source docker helpers
-if [ -f "./weave/helpers/docker.sh" ]; then
-    source ./weave/helpers/docker.sh
+if [ -f "./weave-core/helpers/docker.sh" ]; then
+    source ./weave-core/helpers/docker.sh
 else
     echo -e "\e[31m$SERVICE_NAME: Cannot find 'docker' helper file. Exiting...\e[0m"
     exit 1

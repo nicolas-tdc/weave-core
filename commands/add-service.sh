@@ -4,24 +4,24 @@
 set -e
 
 # Source docker helpers
-if [ -f "./weave/helpers/docker.sh" ]; then
-    source ./weave/helpers/docker.sh
+if [ -f "./weave-core/helpers/docker.sh" ]; then
+    source ./weave-core/helpers/docker.sh
 else
     echo -e "\e[31mCannot find 'docker' file. Exiting...\e[0m"
     exit 1
 fi
 
 # Source git helpers
-if [ -f "./weave/helpers/git.sh" ]; then
-    source ./weave/helpers/git.sh
+if [ -f "./weave-core/helpers/git.sh" ]; then
+    source ./weave-core/helpers/git.sh
 else
     echo -e "\e[31mCannot find 'git' file. Exiting...\e[0m"
     exit 1
 fi
 
 # Source services helpers
-if [ -f "./weave/helpers/services.sh" ]; then
-    source ./weave/helpers/services.sh
+if [ -f "./weave-core/helpers/services.sh" ]; then
+    source ./weave-core/helpers/services.sh
 else
     echo -e "\e[31mCannot find 'services' file. Exiting...\e[0m"
     exit 1
@@ -32,7 +32,7 @@ echo -e "\e[33mTrying to add a service to application '$APP_NAME'...\e[0m"
 # Install service
 echo -e "\e[33mAdding and configuring services...\e[0m"
 
-install_service "$SERVICES_DIRECTORY" "./weave/available-services"
+install_service "$SERVICES_DIRECTORY" "./weave-core/available-services"
 
 echo -e "\e[33mService added successfully.\e[0m"
 

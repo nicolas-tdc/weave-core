@@ -16,8 +16,8 @@ set -e
     service_command_args=("$@")
 
     # Source utilities helpers
-    if [ -f "./weave/helpers/environment.sh" ]; then
-        source ./weave/helpers/environment.sh
+    if [ -f "./weave-core/helpers/environment.sh" ]; then
+        source ./weave-core/helpers/environment.sh
     else
         echo -e "\e[31mCannot find 'environment' file. Exiting...\e[0m"
         exit 1
@@ -29,11 +29,11 @@ set -e
     # Execute the appropriate script based on command line argument
     # service_command_args passed to the service command
     case "$command_name" in
-        start) ./weave/scripts/start.sh ${service_command_args[@]};;
-        stop) ./weave/scripts/stop.sh ${service_command_args[@]};;
-        update) ./weave/scripts/update.sh ${service_command_args[@]};;
-        bak|backup-task) ./weave/scripts/backup-task.sh ${service_command_args[@]};;
-        log|log-available-ports) ./weave/scripts/log-available-ports.sh ${service_command_args[@]};;
+        start) ./weave-core/scripts/start.sh ${service_command_args[@]};;
+        stop) ./weave-core/scripts/stop.sh ${service_command_args[@]};;
+        update) ./weave-core/scripts/update.sh ${service_command_args[@]};;
+        bak|backup-task) ./weave-core/scripts/backup-task.sh ${service_command_args[@]};;
+        log|log-available-ports) ./weave-core/scripts/log-available-ports.sh ${service_command_args[@]};;
     *)
         echo -e "\e[31mInvalid or missing argument. Exiting...\e[0m"
         echo "\e[33mUsage: ./weave.sh <start|stop|update|backup-task|log>\e[0m"

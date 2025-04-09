@@ -72,9 +72,9 @@ install_service() {
         format_docker_compose $service_name $compose_file "${APP_NAME}_network"
     fi
 
-    if [ -d "./weave/default-service" ] && [ -d "$services_directory/$service_name" ]; then
+    if [ -d "./weave-core/default-service" ] && [ -d "$services_directory/$service_name" ]; then
         # Copy default service files to service's directory
-        sudo cp -r ./weave/default-service/* "$services_directory/$service_name"
+        sudo cp -r ./weave-core/default-service/* "$services_directory/$service_name"
         # Set permissions
         sudo chmod -R 755 "$services_directory/$service_name"
         sudo chown -R "$USER:$USER" "$services_directory/$service_name"
