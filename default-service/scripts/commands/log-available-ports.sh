@@ -17,9 +17,13 @@ fi
 if [ -f ".env" ]; then
     source .env
 else
-    echo -e "\e[31m$SERVICE_NAME: Cannot find '.env' file. Exiting...\e[0m"
+    echo -e "\e[31m$SERVICE_NAME: Cannot find '.env' helpers file. Exiting...\e[0m"
     exit 1
 fi
+
+env_name="$1"
+
+echo -e "\e[33m$SERVICE_NAME: Trying to log available ports in environment '$env_name'...\e[0m"
 
 # Iterate over all environment variables
 for env_var in $(compgen -v); do

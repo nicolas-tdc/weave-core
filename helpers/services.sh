@@ -104,13 +104,12 @@ execute_command_on_all_services() {
     shift 2
 
     # Additional arguments for the service command
-    local service_command_args=("$@")
 
     for service_path in $services_directory/*/; do
         # Check if it's a directory
         if [ -d "$service_path" ] && [ -f "${service_path}weave.sh" ]; then
             cd "$service_path"
-            ./weave.sh "$command_name" "${service_command_args[@]}"
+            ./weave.sh "$command_name" "$@"
             cd - > /dev/null 2>&1
         fi
     done
@@ -137,16 +136,13 @@ execute_command_on_specific_service() {
     local command_name=$2
     local service_name=$3
     shift 3
-    
-    # Additional arguments for the service command
-    local service_command_args=("$@")
 
     local service_path="$services_directory/$service_name"
 
     # Execute command on the specific service
     if [ -d "$service_path" ] && [ -f "${service_path}/weave.sh" ]; then
         cd "$service_path"
-        ./weave.sh "$command_name" "${service_command_args[@]}"
+        ./weave.sh "$command_name" "$@"
         cd - > /dev/null 2>&1
     else
         echo -e "\e[31mService '$service_name' not found or missing main weave script.\e[0m"

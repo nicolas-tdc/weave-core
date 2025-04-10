@@ -9,7 +9,7 @@ set -e
 if [ -f "./weave-core/helpers/docker.sh" ]; then
     source ./weave-core/helpers/docker.sh
 else
-    echo -e "\e[31mCannot find 'docker' file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'docker' helpers file. Exiting...\e[0m"
     exit 1
 fi
 
@@ -17,28 +17,33 @@ fi
 if [ -f "./weave-core/helpers/services.sh" ]; then
     source ./weave-core/helpers/services.sh
 else
-    echo -e "\e[31mCannot find 'services' file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'services' helpers file. Exiting...\e[0m"
     exit 1
 fi
 
-if [ -z "$1" ]; then
+# Extract service name from command line arguments
+service_name=$1
+shift
+
+if [ -z "$service_name" ]; then
     # Execute the update command on all services
     echo -e "\e[33mTrying to update application '$APP_NAME'...\e[0m"
 
     execute_command_on_all_services \
         $SERVICES_DIRECTORY \
-        "update"
+        "update" \
+        "$@"
 
     echo -e "\e[33mApplication '$APP_NAME' updated successfully.\e[0m"
 else
     # Execute the update command on a specific service
-    service_name=$1
     echo -e "\e[33mTrying to update service '$service_name'...\e[0m"
 
     execute_command_on_specific_service \
         $SERVICES_DIRECTORY \
         "update" \
-        $service_name
+        $service_name \
+        "$@"
 
     echo -e "\e[33mService '$service_name' updated successfully...\e[0m"
 fi

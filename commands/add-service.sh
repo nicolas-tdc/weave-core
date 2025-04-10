@@ -7,7 +7,7 @@ set -e
 if [ -f "./weave-core/helpers/docker.sh" ]; then
     source ./weave-core/helpers/docker.sh
 else
-    echo -e "\e[31mCannot find 'docker' file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'docker' helpers file. Exiting...\e[0m"
     exit 1
 fi
 
@@ -15,7 +15,7 @@ fi
 if [ -f "./weave-core/helpers/git.sh" ]; then
     source ./weave-core/helpers/git.sh
 else
-    echo -e "\e[31mCannot find 'git' file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'git' helpers file. Exiting...\e[0m"
     exit 1
 fi
 
@@ -23,7 +23,7 @@ fi
 if [ -f "./weave-core/helpers/services.sh" ]; then
     source ./weave-core/helpers/services.sh
 else
-    echo -e "\e[31mCannot find 'services' file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find 'services' helpers file. Exiting...\e[0m"
     exit 1
 fi
 

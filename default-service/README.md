@@ -1,39 +1,61 @@
 # weave-service
 
-# Setup
+[Setup your service](#setup-your-service)
+[Available commands](#available-commands)
+
+## Setup your service
 
 - Copy environment file
 
-**From service's root directory**
+*Execute from your service's root directory*
 ```bash
 cp .env.dist .env
 ```
 
 - Set environment variables: edit copied .env file
 
-# Commands
-**From service's root directory**
+## Available commands
+**Execute from your service's root directory**
 
-- Start service
+- r | run
+
+*Starts the service*
 ```bash
-./weave.sh start
+./weave.sh r
 ```
+Options:
+* Development mode : -d|-dev
 
-- Stop service
+- k | kill
+
+*Stops the service*
 ```bash
-./weave.sh stop
+./weave.sh k
 ```
+Options:
+* Development mode : -d|-dev
 
-- Log service's available ports
+- log | log-available-ports
+
+*Logs the service's available ports*
 ```bash
 ./weave.sh log
 ```
+Options:
+* Development mode : -d|-dev
 
-- Update service
+- upd | update
 ```bash
-./weave.sh update
+./weave.sh upd
 ```
+Options:
+* Development mode : -d|-dev
 
-- Execute service's backup-task
+- bak | backup-task
+
+*Executes the service's backup-task*
 ```bash
-./weave.sh backup-task```
+./weave.sh backup-task
+```
+Options:
+* Development mode : -d|-dev

@@ -13,33 +13,40 @@ else
     exit 1
 fi
 
-if [ -z "$1" ]; then
-    # Execute the start command on all services
+# Extract service name from command line arguments
+service_name=$1
+shift
+
+if [ -z "$service_name" ]; then
+    # Execute the run command on all services
     echo -e "\e[33mTrying to start application '$APP_NAME'...\e[0m"
 
     execute_command_on_all_services \
         $SERVICES_DIRECTORY \
-        "start"
+        "run" \
+        "$@"
 
     execute_command_on_all_services \
         $SERVICES_DIRECTORY \
-        "log"
+        "log" \
+        "$@"
 
     echo -e "\e[33mApplication '$APP_NAME' started successfully.\e[0m"
 else
-    # Execute the start command on a specific service
-    service_name=$1
+    # Execute the run command on a specific service
     echo -e "\e[33mTrying to start service '$service_name'...\e[0m"
 
     execute_command_on_specific_service \
         $SERVICES_DIRECTORY \
-        "start" \
-        $service_name
+        "run" \
+        $service_name \
+        "$@"
 
     execute_command_on_specific_service\
         $SERVICES_DIRECTORY \
         "log" \
-        $service_name
+        $service_name \
+        "$@"
 
     echo -e "\e[33mService '$service_name' started successfully...\e[0m"
 fi
