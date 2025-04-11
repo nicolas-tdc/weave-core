@@ -52,6 +52,7 @@ install_service() {
 
         # Check if service directory already exists
         if ! [ -d "./$services_directory/$service_name" ]; then
+            local service_path="$services_directory/$service_name"
             break;
         fi
 
@@ -62,30 +63,39 @@ install_service() {
     echo -e "\e[33m$service_name: Handling weave files...\e[0m"
 
     # Copy selected service to named service directory
-    cp -r "$weave_services_directory/$selected_service" "$services_directory/$service_name"
+    cp -r "$weave_services_directory/$selected_service" "$service_path"
 
     # Remove git remote
-    rm -rf "$services_directory/$service_name/.git"
+    rm -rf "$service_path/.git"
 
     # Copy default environment files to service's directory
-    if [ -d "$services_directory/$service_name/default-env" ]; then
-        cp -r "$services_directory/$service_name/default-env"/* "$services_directory/$service_name"
+    if [ -d "$service_path/default-env" ]; then
+        cp -r "$service_path/default-env"/* "$service_path"
     fi
 
     # Format docker-compose files
-    local compose_file="$services_directory/$service_name/docker-compose.yml"
-    if [ -f "$compose_file" ]; then
-        echo -e "\e[33m$service_name: Formatting docker-compose.yml file...\e[0m"
-        format_docker_compose $service_name $compose_file "${APP_NAME}_network"
-        echo -e "\e[32m$service_name: Formatted docker-compose.yml file successfully.\e[0m"
-    fi
+    compose_files=(
+    "docker-compose.yml"
+    "docker-compose.dev.yml"
+    "docker-compose.staging.yml"
+    "docker-compose.prod.yml"
+    )
+    for compose_file in "${compose_files[@]}"; do
+        if [[ -f "$service_path/$compose_file" ]]; then
+            format_docker_compose "$service_name" "$service_path/$compose_file" "${APP_NAME}_network"
+            echo -e "\e[32m$service_name: Formatted '$compose_file' successfully.\e[0m"
+        else
+            echo "\e[31m$service_name: File '$compose_file' not found.\e[0m"
+        fi
+    done
 
-    if [ -d "./weave-core/default-service" ] && [ -d "$services_directory/$service_name" ]; then
+    # Handle default service files
+    if [ -d "./weave-core/default-service" ] && [ -d "$service_path" ]; then
         # Copy default service files to service's directory
-        sudo cp -r ./weave-core/default-service/* "$services_directory/$service_name"
+        sudo cp -r ./weave-core/default-service/* "$service_path"
         # Set permissions
-        sudo chmod -R 755 "$services_directory/$service_name"
-        sudo chown -R "$USER:$USER" "$services_directory/$service_name"
+        sudo chmod -R 755 "$service_path"
+        sudo chown -R "$USER:$USER" "$service_path"
     fi
 
     echo -e "\e[32mService $service_name added successfully.\e[0m"

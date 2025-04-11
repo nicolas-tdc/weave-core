@@ -30,13 +30,13 @@ echo -e "\e[32m$SERVICE_NAME: Docker is ready.\e[0m"
 
 # Stop existing containers
 echo -e "\e[33m$SERVICE_NAME: Stopping existing containers...\e[0m"
-docker-compose down
+docker-compose -f docker-compose.yml -f docker-compose.$env_name.yml down
 echo -e "\e[32m$SERVICE_NAME: Stopped existing containers.\e[0m"
 
 # Remove unused networks
-echo -e "\e[33m$SERVICE_NAME: Removing unused networks...\e[0m"
+echo -e "\e[33m$SERVICE_NAME: Removing docker networks...\e[0m"
 remove_networks
-echo -e "\e[32m$SERVICE_NAME: Removed unused networks.\e[0m"
+echo -e "\e[32m$SERVICE_NAME: Removed docker networks.\e[0m"
 
 # Cleaning up unused Docker images
 echo -e "\e[33m$SERVICE_NAME: Cleaning up unused Docker images...\e[0m"

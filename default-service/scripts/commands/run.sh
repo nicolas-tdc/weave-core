@@ -38,7 +38,7 @@ echo -e "\e[32m$SERVICE_NAME: Stopped existing containers.\e[0m"
 
 # Build and start containers
 echo -e "\e[33m$SERVICE_NAME: Building and starting container...\e[0m"
-docker-compose up --build --remove-orphans -d
+docker-compose -f docker-compose.yml -f docker-compose.$env_name.yml up --build --remove-orphans -d
 echo -e "\e[32m$SERVICE_NAME: Container started.\e[0m"
 
 # Clean up unused Docker images
