@@ -5,19 +5,16 @@
 
 ## Setup your service
 
-- Copy environment file
+- **Set your environment variables for each environment**
 
-*Execute from your service's root directory*
-```bash
-cp .env.dist .env
-```
+Modify default-env files for remote modifications
 
-- Set environment variables: edit copied .env file
+Modify root environment files for local modifications
 
 ## Available commands
 **Execute from your service's root directory**
 
-- r | run
+- **r | run**
 
 *Starts the service*
 ```bash
@@ -26,7 +23,7 @@ cp .env.dist .env
 Options:
 * Development mode : -d|-dev
 
-- k | kill
+- **k | kill**
 
 *Stops the service*
 ```bash
@@ -35,7 +32,7 @@ Options:
 Options:
 * Development mode : -d|-dev
 
-- log | log-available-ports
+- **log | log-available-ports**
 
 *Logs the service's available ports*
 ```bash
@@ -44,7 +41,7 @@ Options:
 Options:
 * Development mode : -d|-dev
 
-- bak | backup-task
+- **bak | backup-task**
 
 *Executes the service's backup-task*
 ```bash

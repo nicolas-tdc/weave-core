@@ -59,6 +59,8 @@ install_service() {
         continue;
     done
 
+    echo -e "\e[33m$service_name: Handling weave files...\e[0m"
+
     # Copy selected service to named service directory
     cp -r "$weave_services_directory/$selected_service" "$services_directory/$service_name"
 
@@ -75,6 +77,7 @@ install_service() {
     if [ -f "$compose_file" ]; then
         echo -e "\e[33m$service_name: Formatting docker-compose.yml file...\e[0m"
         format_docker_compose $service_name $compose_file "${APP_NAME}_network"
+        echo -e "\e[32m$service_name: Formatted docker-compose.yml file successfully.\e[0m"
     fi
 
     if [ -d "./weave-core/default-service" ] && [ -d "$services_directory/$service_name" ]; then
