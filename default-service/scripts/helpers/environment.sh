@@ -51,7 +51,7 @@ prepare_environment_file() {
 #   None
 # Usage: log_service_usage
 log_service_usage() {
-    echo -e "\e[33mUsage: ./weave.sh <run|kill|update|backup-task|log-available-ports>\e[0m"
+    echo -e "\e[33mUsage: ./weave.sh <run|kill|backup-task|log-available-ports>\e[0m"
     echo -e "\e[33mOptions available:\e[0m"
     echo -e "\e[33mDevelopment mode: -d | -dev\e[0m"
     echo -e "\e[33mStaging mode: -s | -staging\e[0m"

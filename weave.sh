@@ -86,7 +86,6 @@ set -e
     case "$command_name" in
         r|run) ./weave-core/commands/run.sh $service_name "$@";;
         k|kill) ./weave-core/commands/kill.sh $service_name "$@";;
-        upd|update) ./weave-core/commands/update.sh $service_name "$@";;
         add|add-service) ./weave-core/commands/add-service.sh;;
         bak|backup-task) ./weave-core/commands/backup-task.sh $service_name "$@";;
         bak-on|backup-enable) ./weave-core/commands/backup-enable.sh;;

@@ -44,13 +44,6 @@ Options:
 Options:
 * Development mode : -d|-dev
 
-- upd | update
-```bash
-./weave.sh upd
-```
-Options:
-* Development mode : -d|-dev
-
 - bak | backup-task
 
 *Executes the service's backup-task*

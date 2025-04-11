@@ -70,7 +70,6 @@ set -e
     case "$command_name" in
         r|run) ./scripts/commands/run.sh $env_name "$@";;
         k|kill) ./scripts/commands/kill.sh $env_name "$@";;
-        upd|update) ./scripts/commands/update.sh $env_name "$@";;
         bak|backup-task) ./scripts/commands/backup-task.sh $env_name "$@";;
         log|log-available-ports) ./scripts/commands/log-available-ports.sh $env_name "$@";;
         *)
