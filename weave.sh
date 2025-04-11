@@ -9,12 +9,19 @@ set -e
     # Exectue from application root
     cd "$(dirname "$0")"
 
-    # Source environment helpers
+    # Source application environment helpers
     if [ -f "./weave-core/helpers/environment.sh" ]; then
         source ./weave-core/helpers/environment.sh
     else
-        echo -e "\e[31mCannot find environment '.env' helpers file. Exiting...\e[0m"
-        echo -e "\e[94mSuggestion: cp .env.dist .env\e[0m"
+        echo -e "\e[31mCannot find application environment helpers file. Exiting...\e[0m"
+        exit 1
+    fi
+
+    # Source service environment helpers
+    if [ -f "./weave-core/default-service/scripts/helpers/environment.sh" ]; then
+        source ./weave-core/default-service/scripts/helpers/environment.sh
+    else
+        echo -e "\e[31mCannot find service environment helpers file. Exiting...\e[0m"
         exit 1
     fi
 
@@ -22,6 +29,7 @@ set -e
     prepare_application
 
     # Options defaults
+    local env_name="prod"
     local service_name=""
 
     # Parse arguments to extract options
@@ -34,14 +42,21 @@ set -e
                 shift
                 ;;
             -d|-dev)
-                # Leave devmode argument for service script
+                env_name="dev"
+                # Leave dev argument for service script
+                app_script_args+=("$1")
+                shift
+                ;;
+            -s|-staging)
+                env_name="staging"
+                # Leave staging argument for service script
                 app_script_args+=("$1")
                 shift
                 ;;
             -*||--*)
                 # Handle unknown options
                 echo -e "\e[31mInvalid option "$1". Exiting...\e[0m"
-                log_app_script_usage
+                log_app_usage
                 exit 1
                 ;;
             *)
@@ -58,14 +73,16 @@ set -e
     # Check if enough arguments are provided
     if [ "$#" -lt 1 ]; then
         echo -e "\e[31mAt least one argument is required. Exiting...\e[0m"
-        log_app_script_usage
+        log_app_usage
         exit 1
-    else
-        local command_name="$1"
-        shift
     fi
 
-    # Execute the appropriate script based on command line arguments
+    # Aggregate relevant environment files
+    prepare_environment_file "$env_name"
+
+    # Execute the appropriate script based on command line argument
+    local command_name="$1"
+    shift
     case "$command_name" in
         r|run) ./weave-core/commands/run.sh $service_name "$@";;
         k|kill) ./weave-core/commands/kill.sh $service_name "$@";;
@@ -76,7 +93,7 @@ set -e
         bak-off|backup-disable) ./weave-core/commands/backup-disable.sh;;
         *)
             echo -e "\e[31mInvalid argument. Exiting...\e[0m"
-            log_app_script_usage
+            log_app_usage
             exit 1
             ;;
     esac

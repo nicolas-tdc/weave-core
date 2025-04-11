@@ -25,14 +25,14 @@ prepare_application() {
     mkdir -p $BACKUP_DIRECTORY > /dev/null 2>&1
 }
 
-# Function: log_app_script_usage
+# Function: log_app_usage
 # Purpose: Log the usage of the script
 # Arguments:
 #   None
 # Returns:
 #   None
-# Usage: log_app_script_usage
-log_app_script_usage() {
+# Usage: log_app_usage
+log_app_usage() {
     echo -e "\e[33mUsage: ./weave.sh <run|kill|update|add-service|backup-task|backup-enable|backup-disable>\e[0m"
     echo -e "\e[33mOptions available:\e[0m"
     echo -e "\e[33mDevelopment mode: -d|-dev\e[0m"

@@ -32,10 +32,15 @@ set -e
                 env_name="dev"
                 shift
                 ;;
+            -s|-staging)
+                # Set env_name
+                env_name="staging"
+                shift
+                ;;
             -*||--*)
                 # Handle unknown options
                 echo -e "\e[31m$SERVICE_NAME: Invalid option "$1". Exiting...\e[0m"
-                log_service_script_usage
+                log_service_usage
                 exit 1
                 ;;
             *)
@@ -52,15 +57,16 @@ set -e
     # Check if enough arguments are provided
     if [ "$#" -lt 1 ]; then
         echo -e "\e[31m$SERVICE_NAME: At least one argument is required. Exiting...\e[0m"
-        log_service_script_usage
+        log_service_usage
         exit 1
-    else
-        local command_name="$1"
-        shift
     fi
 
+    # Aggregate relevant environment files
+    prepare_environment_file "$env_name"
+
     # Execute the appropriate script based on command line argument
-    # service_command_args passed to the service command
+    local command_name="$1"
+    shift
     case "$command_name" in
         r|run) ./scripts/commands/run.sh $env_name "$@";;
         k|kill) ./scripts/commands/kill.sh $env_name "$@";;
@@ -69,7 +75,7 @@ set -e
         log|log-available-ports) ./scripts/commands/log-available-ports.sh $env_name "$@";;
         *)
             echo -e "\e[31m$SERVICE_NAME: Invalid argument. Exiting...\e[0m"
-            log_service_script_usage
+            log_service_usage
             exit 1
             ;;
     esac

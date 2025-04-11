@@ -65,6 +65,11 @@ install_service() {
     # Remove git remote
     rm -rf "$services_directory/$service_name/.git"
 
+    # Copy default environment files to service's directory
+    if [ -d "$services_directory/$service_name/default-env" ]; then
+        cp -r "$services_directory/$service_name/default-env"/* "$services_directory/$service_name"
+    fi
+
     # Format docker-compose files
     local compose_file="$services_directory/$service_name/docker-compose.yml"
     if [ -f "$compose_file" ]; then
