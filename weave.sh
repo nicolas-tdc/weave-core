@@ -21,11 +21,11 @@ set -e
     prepare_application
 
     # Options defaults
-    local env_name="prod"
-    local service_name=""
+    env_name="prod"
+    service_name=""
 
     # Parse arguments to extract options
-    local app_script_args=()
+    app_script_args=()
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --s=*|--service=*)
@@ -73,7 +73,7 @@ set -e
     prepare_environment_file "$env_name"
 
     # Execute the appropriate script based on command line argument
-    local command_name="$1"
+    command_name="$1"
     shift
     case "$command_name" in
         r|run) ./weave-core/commands/run.sh $service_name "$@";;
