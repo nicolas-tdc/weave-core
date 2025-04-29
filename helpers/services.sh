@@ -68,9 +68,11 @@ install_service() {
     # Remove git remote
     rm -rf "$service_path/.git"
 
-    # Copy default environment files to service's directory
+    # Copy default environment files to application's root directory
     if [ -d "$service_path/default-env" ]; then
-        cp -r "$service_path/default-env"/* "$service_path"
+        for file in "$service_path"/default-env/.*; do
+            [ -f "$file" ] && [ ! -e "./$(basename "$file")" ] && cp -n "$file" ./
+        done
     fi
 
     # Format docker-compose files
@@ -84,8 +86,6 @@ install_service() {
         if [[ -f "$service_path/$compose_file" ]]; then
             format_docker_compose "$service_name" "$service_path/$compose_file" "${APP_NAME}_network"
             echo -e "\e[32m$service_name: Formatted '$compose_file' successfully.\e[0m"
-        else
-            echo "\e[31m$service_name: File '$compose_file' not found.\e[0m"
         fi
     done
 
