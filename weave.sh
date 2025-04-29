@@ -45,7 +45,7 @@ set -e
                 app_script_args+=("$1")
                 shift
                 ;;
-            -*||--*)
+            -*|--*)
                 # Handle unknown options
                 echo -e "\e[31mInvalid option "$1". Exiting...\e[0m"
                 log_app_usage
