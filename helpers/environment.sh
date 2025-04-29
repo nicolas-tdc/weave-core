@@ -25,6 +25,27 @@ prepare_application() {
     mkdir -p $BACKUP_DIRECTORY > /dev/null 2>&1
 }
 
+# Function: prepare_environment_file
+# Purpose: Aggregate the environment files into a single .env file
+# Arguments:
+#   1. environment_name: The name of the environment to prepare
+# Returns: None
+# Usage: prepare_environment_file <environment_name>
+prepare_environment_file() {
+    if [ -z "$1" ]; then
+        echo -e "\e[31mprepare_environment_file() - Error: First argument is required.\e[0m"
+        echo -e "\e[31musage: prepare_environment_file <environment_name>\e[0m"
+        exit 1
+    fi
+
+    local env_name=$1
+
+    # Copy the common environment file to .env
+    [ -f ".env.common" ] && cat ".env.common" > ".env"
+    # Copy the environment-specific file to .env
+    [ -f ".env" ] && [ -f ".env.$env_name" ] && cat ".env.$env_name" >> ".env"
+}
+
 # Function: log_app_usage
 # Purpose: Log the usage of the script
 # Arguments:

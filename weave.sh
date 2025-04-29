@@ -17,14 +17,6 @@ set -e
         exit 1
     fi
 
-    # Source service environment helpers
-    if [ -f "./weave-core/default-service/scripts/helpers/environment.sh" ]; then
-        source ./weave-core/default-service/scripts/helpers/environment.sh
-    else
-        echo -e "\e[31mCannot find service environment helpers file. Exiting...\e[0m"
-        exit 1
-    fi
-
     # Defines APP_NAME, SERVICES_DIRECTORY, BACKUP_DIRECTORY
     prepare_application
 

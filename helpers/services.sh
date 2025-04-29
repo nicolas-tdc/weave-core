@@ -89,15 +89,6 @@ install_service() {
         fi
     done
 
-    # Handle default service files
-    if [ -d "./weave-core/default-service" ] && [ -d "$service_path" ]; then
-        # Copy default service files to service's directory
-        sudo cp -r ./weave-core/default-service/* "$service_path"
-        # Set permissions
-        sudo chmod -R 755 "$service_path"
-        sudo chown -R "$USER:$USER" "$service_path"
-    fi
-
     echo -e "\e[32mService $service_name added successfully.\e[0m"
 }
 
