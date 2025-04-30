@@ -9,6 +9,14 @@ set -e
     # Exectue from application root
     cd "$(dirname "$0")"
 
+    # Source arguments parser
+    if [ -f "./weave-core/helpers/arguments-parser.sh" ]; then
+        source ./weave-core/helpers/arguments-parser.sh
+    else
+        echo -e "\e[31mCannot find arguments parser file. Exiting...\e[0m"
+        exit 1
+    fi
+
     # Source application environment helpers
     if [ -f "./weave-core/helpers/environment.sh" ]; then
         source ./weave-core/helpers/environment.sh
@@ -17,50 +25,16 @@ set -e
         exit 1
     fi
 
+    # Source services helpers
+    if [ -f "./weave-core/helpers/services.sh" ]; then
+        source ./weave-core/helpers/services.sh
+    else
+        echo -e "\e[31mCannot find 'services' helper file. Exiting...\e[0m"
+        exit 1
+    fi
+
     # Defines APP_NAME, SERVICES_DIRECTORY, BACKUP_DIRECTORY
     prepare_application
-
-    # Options defaults
-    env_name="prod"
-    service_name=""
-
-    # Parse arguments to extract options
-    app_script_args=()
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --s=*|--service=*)
-                # Extract the value of the --service argument
-                service_name="${1#*=}"
-                shift
-                ;;
-            -d|-dev)
-                env_name="dev"
-                # Leave dev argument for service script
-                app_script_args+=("$1")
-                shift
-                ;;
-            -s|-staging)
-                env_name="staging"
-                # Leave staging argument for service script
-                app_script_args+=("$1")
-                shift
-                ;;
-            -*|--*)
-                # Handle unknown options
-                echo -e "\e[31mInvalid option "$1". Exiting...\e[0m"
-                log_app_usage
-                exit 1
-                ;;
-            *)
-                # Handle positional arguments
-                app_script_args+=("$1")
-                shift
-                ;;
-        esac
-    done
-
-    # Restore positional arguments
-    set -- "${app_script_args[@]}"
 
     # Check if enough arguments are provided
     if [ "$#" -lt 1 ]; then
@@ -69,6 +43,9 @@ set -e
         exit 1
     fi
 
+    # Parse arguments to extract options
+    read env_name service_name <<< $(parse_command_arguments "$@")
+
     # Aggregate relevant environment files
     prepare_environment_file "$env_name"
 
@@ -76,10 +53,25 @@ set -e
     command_name="$1"
     shift
     case "$command_name" in
-        r|run) ./weave-core/commands/run.sh $service_name "$@";;
-        k|kill) ./weave-core/commands/kill.sh $service_name "$@";;
+        r|run|k|kill|bak|backup-task)
+            if [ "$service_name" == "" ]; then
+                echo -e "\e[33mTrying to execute '$command_name' on application '$APP_NAME'...\e[0m"
+
+                execute_command_on_all_services \
+                    $SERVICES_DIRECTORY \
+                    $command_name \
+                    $@
+            else
+                echo -e "\e[33mTrying to start service '$service_name'...\e[0m"
+
+                execute_command_on_specific_service \
+                    $SERVICES_DIRECTORY \
+                    $command_name \
+                    $service_name \
+                    $@
+            fi
+            ;;
         add|add-service) ./weave-core/commands/add-service.sh;;
-        bak|backup-task) ./weave-core/commands/backup-task.sh $service_name "$@";;
         bak-on|backup-enable) ./weave-core/commands/backup-enable.sh;;
         bak-off|backup-disable) ./weave-core/commands/backup-disable.sh;;
         *)
