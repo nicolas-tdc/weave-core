@@ -77,22 +77,16 @@ install_service() {
         done
     fi
 
-    # Format docker-compose.yml
-    if [[ -f "$service_path/docker-compose.yml" ]]; then
-        format_docker_compose "$service_name" "$service_path/docker-compose.yml" 0
-        echo -e "\e[32m$service_name: Formatted 'docker-compose.yml' successfully.\e[0m"
-    fi
-
-    # Format environment specific docker-compose files
+    # Format docker-compose files
     compose_files=(
-    # "docker-compose.yml"
+    "docker-compose.yml"
     "docker-compose.dev.yml"
     "docker-compose.staging.yml"
     "docker-compose.prod.yml"
     )
     for compose_file in "${compose_files[@]}"; do
         if [[ -f "$service_path/$compose_file" ]]; then
-            format_docker_compose "$service_name" "$service_path/$compose_file" 1
+            format_docker_compose "$service_name" "$service_path/$compose_file"
             echo -e "\e[32m$service_name: Formatted '$compose_file' successfully.\e[0m"
         fi
     done
