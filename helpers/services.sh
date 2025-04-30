@@ -71,7 +71,9 @@ install_service() {
     # Copy default environment files to application's root directory
     if [ -d "$service_path/default-env" ]; then
         for file in "$service_path"/default-env/.*; do
-            [ -f "$file" ] && [ ! -e "./$(basename "$file")" ] && cp -n "$file" ./
+            [ -f "$file" ] && \
+            [ ! -e "$service_path/$(basename "$file")" ] && \
+            cp -n "$file" "$service_path"
         done
     fi
 
