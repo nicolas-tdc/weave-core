@@ -41,13 +41,9 @@ prepare_environment_files() {
     local env_name=$1
 
     # Copy the environment-specific file to .env
-    if ! [ -f ".env.$env_name" ] && ! [ -f "./env-remote/.env.$env_name" ]; then
-        echo -e "\e[31mError: Local and remote environment files .env.$env_name not found.\e[0m"
+    if ! [ -f ".env.$env_name" ]; then
+        echo -e "\e[31mError: Environment specific file '.env.$env_name' not found.\e[0m"
         exit 1
-    fi
-
-    if ! [ -f ".env.$env_name" ] && [ -f "./env-remote/.env.$env_name" ]; then
-        cp "./env-remote/.env.$env_name" ".env.$env_name"
     fi
 
     cp -f ".env.$env_name" ".env"
