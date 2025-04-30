@@ -69,8 +69,8 @@ install_service() {
     rm -rf "$service_path/.git"
 
     # Copy default environment files to application's root directory
-    if [ -d "$service_path/default-env" ]; then
-        for file in "$service_path"/default-env/.*; do
+    if [ -d "$service_path/env-remote" ]; then
+        for file in "$service_path"/env-remote/.*; do
             [ -f "$file" ] && \
             [ ! -e "$service_path/$(basename "$file")" ] && \
             cp -n "$file" "$service_path"

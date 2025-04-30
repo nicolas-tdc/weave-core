@@ -47,7 +47,7 @@ set -e
     read env_name service_name <<< $(parse_command_arguments "$@")
 
     # Aggregate relevant environment files
-    prepare_environment_file "$env_name"
+    prepare_environment_files "$env_name"
 
     # Execute the appropriate script based on command line argument
     command_name="$1"
