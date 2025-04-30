@@ -13,23 +13,25 @@ set -e
 # Usage: format_docker_compose <service_name> <compose_file>
 format_docker_compose() {
     if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-        echo -e "\e[31mformat_docker_compose() - Error: Two arguments are required.\e[0m"
-        echo -e "\e[31musage: format_docker_compose <service_name> <compose_file>\e[0m"
+        echo -e "\e[31mformat_docker_compose() - Error: Three arguments are required.\e[0m"
+        echo -e "\e[31musage: format_docker_compose <service_name> <compose_file> <add_container_name>\e[0m"
+        echo -e "\e[31mexample: format_docker_compose \"api\" \"docker-compose.yml\" 1\e[0m"
         exit 1
     fi
 
     local service_name=$1
     local compose_file=$2
+    local add_container_name=$3
 
     local app_env_file_path="../../.env"
     if ! grep -q "$app_env_file_path" "$compose_file"; then
         sed -i '/env_file:/a\ \ \ \ \ \ - '"$app_env_file_path" "$compose_file"
     fi
 
-    awk -v container_name="$service_name" '
+    awk -v container_name="$service_name" -v add_container_name="$add_container_name" '
     BEGIN {
         inside_service=0; inside_volumes=0; inside_service_volumes=0;
-        service_name=""; added_container_name=0;
+        service_name=""; add_container_name=0;
     }
 
     /^services:/ { print; next }
@@ -52,9 +54,9 @@ format_docker_compose() {
         gsub(/:$/, "", service_name)
         modified_service_name = container_name "_" service_name
         print "  " modified_service_name ":"
-        if (added_container_name == 0) {
+        if (add_container_name == 1) {
             print "    container_name: " modified_service_name
-            added_container_name = 1
+            add_container_name = 0
         }
         inside_service=1
         next
@@ -85,7 +87,7 @@ format_docker_compose() {
     { print }
 
     END {
-        if (inside_service && added_container_name == 0)
+        if (inside_service && add_container_name == 0)
             print "    container_name: " modified_service_name
     }
     ' "$compose_file" > tmpfile && mv tmpfile "$compose_file"
