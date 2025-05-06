@@ -53,7 +53,7 @@ set -e
     command_name="$1"
     shift
     case "$command_name" in
-        r|run|k|kill|bak|backup-task)
+        run|kill|backup)
             if [ "$service_name" == "" ]; then
                 echo -e "\e[33mTrying to execute '$command_name' on application '$APP_NAME'...\e[0m"
 
@@ -71,9 +71,9 @@ set -e
                     $@
             fi
             ;;
-        add|add-service) ./weave-core/commands/add-service.sh;;
-        bak-on|backup-enable) ./weave-core/commands/backup-enable.sh;;
-        bak-off|backup-disable) ./weave-core/commands/backup-disable.sh;;
+        add-service) ./weave-core/commands/add-service.sh;;
+        backup-enable) ./weave-core/commands/backup-enable.sh;;
+        backup-disable) ./weave-core/commands/backup-disable.sh;;
         *)
             echo -e "\e[31mInvalid argument. Exiting...\e[0m"
             log_app_usage
