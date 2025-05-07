@@ -3,14 +3,6 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Source docker helpers
-if [ -f "./weave-core/helpers/docker.sh" ]; then
-    source ./weave-core/helpers/docker.sh
-else
-    echo -e "\e[31mCannot find 'docker' helpers file. Exiting...\e[0m"
-    exit 1
-fi
-
 # Source git helpers
 if [ -f "./weave-core/helpers/git.sh" ]; then
     source ./weave-core/helpers/git.sh
@@ -20,12 +12,13 @@ else
 fi
 
 # Source services helpers
-if [ -f "./weave-core/helpers/services.sh" ]; then
-    source ./weave-core/helpers/services.sh
+if [ -f "./weave-core/helpers/services/setup.sh" ]; then
+    source ./weave-core/helpers/services/setup.sh
 else
-    echo -e "\e[31mCannot find 'services' helpers file. Exiting...\e[0m"
+    echo -e "\e[31mCannot find services setup helper file. Exiting...\e[0m"
     exit 1
 fi
+
 
 echo -e "\e[33mTrying to add a service to application '$APP_NAME'...\e[0m"
 

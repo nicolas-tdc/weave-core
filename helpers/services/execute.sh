@@ -5,69 +5,75 @@ set -e
 
 # This script contains helper functions for managing weave services.
 
-# Function: execute_command_on_all_services
-# Purpose: Executes a command on all services in the specified directory.
+# Function: execute_service_command_script
+# Purpose: Executes a script on a specific service.
 # Arguments:
-#   1. services_directory: The directory containing the services.
-#   2. command_name: The name of the command to execute.
-#   @. service_command_args: Additional arguments for the service command.
+#   1. script_path: The path to the script to execute.
+#   @. script_args: Additional arguments for the script.
 # Returns:
 #   None
-# Usage: execute_command_on_all_services <services_directory> <command_name> [<service_command_args>...]
-execute_command_on_all_services() {
-    if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "\e[31mexecute_command_on_all_services() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[33musage: execute_command_on_all_services <services_directory> <command_name>\e[0m"
+# Usage: execute_service_command_script <script_path> [<script_args>...]
+execute_service_command_script() {
+    if [ -z "$1" ]; then
+        echo -e "\e[31mexecute_service_command_script() - Error: First argument is required.\e[0m"
+        echo -e "\e[33musage: execute_service_command_script <services_directory> <command_name>\e[0m"
         exit 1
     fi
 
-    local services_directory=$1
-    local command_name=$2
+    local script_path=$1
+    local service_path=$2
     shift 2
-
-    # Additional arguments for the service command
-
-    for service_path in $services_directory/*/; do
-        # Check if it's a directory
-        if [ -d "$service_path" ] && [ -f "${service_path}weave.sh" ]; then
-            cd "$service_path"
-            ./weave.sh "$command_name" "$@"
-            cd - > /dev/null 2>&1
-        fi
-    done
-}
-
-# Function: execute_command_on_specific_service
-# Purpose: Executes a command on a specific service in the specified directory.
-# Arguments:
-#   1. services_directory: The directory containing the services.
-#   2. command_name: The name of the command to execute.
-#   3. service_name: The name of the service to execute the command on.
-#   @. service_command_args: Additional arguments for the service command.
-# Returns:
-#   None
-# Usage: execute_command_on_specific_service <services_directory> <command_name> <service_name> [<service_command_args>...]
-execute_command_on_specific_service() {
-    if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-        echo -e "\e[31mexecute_command_on_specific_service() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: execute_command_on_specific_service <services_directory> <command_name> <service_name>\e[0m"
-        exit 1
-    fi
-
-    local services_directory=$1
-    local command_name=$2
-    local service_name=$3
-    shift 3
-
-    local service_path="$services_directory/$service_name"
 
     # Execute command on the specific service
     if [ -d "$service_path" ] && [ -f "${service_path}/weave.sh" ]; then
         cd "$service_path"
-        ./weave.sh "$command_name" "$@"
+        source "$script_path" "$@"
         cd - > /dev/null 2>&1
     else
-        echo -e "\e[31mService '$service_name' not found or missing main weave script.\e[0m"
+        echo -e "\e[31mService '$SERVICE_NAME' not found or missing main weave script.\e[0m"
         exit 1
+    fi
+}
+
+# Function: execute_command
+# Purpose: Executes a command on all services or a specific service.
+# Arguments:
+#   1. command_name: The name of the command to execute.
+#   @. command_args: Additional arguments for the command.
+# Returns:
+#   None
+# Usage: execute_command <command_name> [<args>...]
+execute_command() {
+    if [ -z "$1" ]; then
+        echo -e "\e[31mexecute_command() - Error: First argument is required.\e[0m"
+        echo -e "\e[33musage: execute_command <command_name> [<args>...]\e[0m"
+        exit 1
+    fi
+
+    local command_name=$1
+    shift 1
+
+    script_relative_path="./weave-core/helpers/services/commands/$command_name.sh"
+    script_path="$(cd "$(dirname "$script_relative_path")" && pwd)/$(basename "$script_relative_path")"
+
+    if [ "$SERVICE_NAME" == "" ]; then
+        echo -e "\e[33mTrying to $command_name application '$APP_NAME'...\e[0m"
+
+        for service_path in $SERVICES_DIRECTORY/*/; do
+            SERVICE_NAME=$(basename "$service_path")
+
+            execute_service_command_script \
+                $script_path \
+                "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+                $@
+        done
+    else
+        echo -e "\e[33mTrying to $command_name service '$SERVICE_NAME'...\e[0m"
+
+        execute_service_command_script \
+            $script_path \
+            "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+            $@
+
     fi
 }

@@ -25,11 +25,19 @@ set -e
         exit 1
     fi
 
-    # Source services helpers
-    if [ -f "./weave-core/helpers/services.sh" ]; then
-        source ./weave-core/helpers/services.sh
+    # Source logs helpers
+    if [ -f "./weave-core/helpers/logs.sh" ]; then
+        source ./weave-core/helpers/logs.sh
     else
-        echo -e "\e[31mCannot find 'services' helper file. Exiting...\e[0m"
+        echo -e "\e[31mCannot find logs helper file. Exiting...\e[0m"
+        exit 1
+    fi
+
+    # Source services helpers
+    if [ -f "./weave-core/helpers/services/execute.sh" ]; then
+        source ./weave-core/helpers/services/execute.sh
+    else
+        echo -e "\e[31mCannot find services execute helper file. Exiting...\e[0m"
         exit 1
     fi
 
@@ -55,21 +63,30 @@ set -e
     case "$command_name" in
         run|kill|backup)
             if [ "$service_name" == "" ]; then
-                echo -e "\e[33mTrying to execute '$command_name' on application '$APP_NAME'...\e[0m"
+            execute_service_command $command_name $@
+            # script_relative_path="./weave-core/helpers/services/commands/$command_name.sh"
+            # script_path="$(cd "$(dirname "$script_relative_path")" && pwd)/$(basename "$script_relative_path")"
 
-                execute_command_on_all_services \
-                    $SERVICES_DIRECTORY \
-                    $command_name \
-                    $@
-            else
-                echo -e "\e[33mTrying to start service '$service_name'...\e[0m"
+            # if [ "$SERVICE_NAME" == "" ]; then
+            #     echo -e "\e[33mTrying to $command_name application '$APP_NAME'...\e[0m"
 
-                execute_command_on_specific_service \
-                    $SERVICES_DIRECTORY \
-                    $command_name \
-                    $service_name \
-                    $@
-            fi
+            #     for service_path in $SERVICES_DIRECTORY/*/; do
+            #         SERVICE_NAME=$(basename "$service_path")
+
+            #         execute_service_command_script \
+            #             $script_path \
+            #             "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+            #             $@
+            #     done
+            # else
+            #     echo -e "\e[33mTrying to $command_name service '$SERVICE_NAME'...\e[0m"
+
+            #     execute_service_command_script \
+            #         $script_path \
+            #         "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+            #         $@
+
+            # fi
             ;;
         add-service) ./weave-core/commands/add-service.sh;;
         backup-enable) ./weave-core/commands/backup-enable.sh;;

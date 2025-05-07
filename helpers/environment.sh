@@ -6,23 +6,28 @@ set -e
 # This script contains environment helper functions for the weave application.
 
 # Function: prepare_application
-# Purpose: Set the application environment variables from the .env file
-# Arguments:
-#   None
+# Purpose: Prepare the application by creating necessary directories
+# Arguments: None
 # Returns:
-#   None
+#   1. app_name: The name of the application
+#   2. services_directory: The directory for services
+#   3. backup_directory: The directory for backups
 # Usage: prepare_application
+#   prepare_application
 prepare_application() {
     # Get app name from directory name
-    export APP_NAME=$(basename "$PWD") > /dev/null 2>&1
+    local app_name=$(basename "$PWD") > /dev/null 2>&1
 
     # Setup services directory
-    export SERVICES_DIRECTORY="services"
-    mkdir -p $SERVICES_DIRECTORY > /dev/null 2>&1
+    local services_directory="services"
+    mkdir -p $services_directory > /dev/null 2>&1
 
     # Setup backup directory
-    export BACKUP_DIRECTORY="backups"
-    mkdir -p $BACKUP_DIRECTORY > /dev/null 2>&1
+    local backup_directory="backups"
+    mkdir -p $backup_directory > /dev/null 2>&1
+
+    # Return parsed arguments and options
+    echo "$app_name" "$services_directory" "$backup_directory"
 }
 
 # Function: prepare_environment_files
@@ -38,14 +43,12 @@ prepare_environment_files() {
         exit 1
     fi
 
-    local env_name=$1
-
     # Copy the environment-specific file to .env
-    if ! [ -f ".env.$env_name" ]; then
-        echo -e "\e[31mError: Environment specific file '.env.$env_name' not found.\e[0m"
+    if ! [ -f ".env.$ENV_NAME" ]; then
+        echo -e "\e[31mError: Environment specific file '.env.$ENV_NAME' not found.\e[0m"
         exit 1
     fi
 
-    cp -f ".env.$env_name" ".env"
+    cp -f ".env.$ENV_NAME" ".env"
     source .env
 }

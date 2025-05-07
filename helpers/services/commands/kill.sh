@@ -3,25 +3,7 @@
 # Exit immediately if a command fails
 set -e
 
-# Source utilities helpers
-if [ -f "./weave-service/helpers/utils.sh" ]; then
-    source ./weave-service/helpers/utils.sh
-else
-    echo -e "\e[31m$SERVICE_NAME: Cannot find 'utils' helper file. Exiting...\e[0m"
-    exit 1
-fi
-
-# Source docker helpers
-if [ -f "./weave-service/helpers/docker.sh" ]; then
-    source ./weave-service/helpers/docker.sh
-else
-    echo -e "\e[31m$SERVICE_NAME: Cannot find 'docker' helpers file. Exiting...\e[0m"
-    exit 1
-fi
-
-env_name="$1"
-
-echo -e "\e[33m$SERVICE_NAME: Trying to stop in environment '$env_name'...\e[0m"
+echo -e "\e[33m$SERVICE_NAME: Trying to stop in environment '$ENV_NAME'...\e[0m"
 
 # Prepare docker
 echo -e "\e[33m$SERVICE_NAME: Preparing docker...\e[0m"
