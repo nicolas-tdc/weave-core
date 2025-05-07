@@ -27,8 +27,12 @@ parse_command_arguments() {
                 service_name="${1#*=}"
                 shift
                 ;;
-            -d|-dev)
+            -dev)
                 env_name="dev"
+                shift
+                ;;
+            -staging)
+                env_name="staging"
                 shift
                 ;;
             *)
