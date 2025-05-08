@@ -83,7 +83,8 @@ set -e
     case "$command_name" in
         run|kill) execute_command $command_name;;
         backup) source ./weave-core/commands/backup.sh;;
-        add-service) source ./weave-core/commands/add-service.sh;;
+        add-service) source ./weave-core/commands/service-add.sh;;
+        rm-service) source ./weave-core/commands/remove-service.sh;;
         backup-enable) source ./weave-core/commands/backup-enable.sh;;
         backup-disable) source ./weave-core/commands/backup-disable.sh;;
         *)

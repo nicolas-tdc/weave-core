@@ -56,6 +56,21 @@ merge_gitignore_files() {
     }
 }
 
+remove_service_from_gitignore() {
+    if [ -z "$1" || -z "$2" ]; then
+        echo -e "\e[31mremove_service_from_gitignore() - Error: First and second argument are required.\e[0m"
+        echo -e "\e[31musage: remove_service_from_gitignore <service_name> <output_gitignore>\e[0m"
+        exit 1
+    fi
+    local service_name=$1
+    local output_gitignore=$2
+    
+    # Remove all empty lines following the service name
+    sed -i "/$service_name/,/^$/d" "$output_gitignore"
+    # Remove all lines containing the service name from the .gitignore file
+    sed -i "/$service_name/d" "$output_gitignore"
+}
+
 # Function: update_git_submodules
 # Purpose: Updates all git submodules to the latest version.
 # Arguments: None
