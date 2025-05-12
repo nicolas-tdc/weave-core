@@ -64,10 +64,10 @@ set -e
         exit 1
     fi
 
-    read APP_NAME SERVICES_DIRECTORY BACKUP_DIRECTORY <<< $(prepare_application)
+    read APP_NAME SERVICES_DIRECTORY BACKUPS_DIRECTORY <<< $(prepare_application)
     export APP_NAME
     export SERVICES_DIRECTORY
-    export BACKUP_DIRECTORY
+    export BACKUPS_DIRECTORY
 
     # Parse arguments to extract environment and service name
     read ENV_NAME SERVICE_NAME <<< $(parse_command_arguments "$@")
@@ -84,7 +84,7 @@ set -e
         run|kill) execute_command $command_name;;
         backup) source ./weave-core/commands/backup.sh;;
         add-service) source ./weave-core/commands/service-add.sh;;
-        rm-service) source ./weave-core/commands/remove-service.sh;;
+        rm-service) source ./weave-core/commands/service-remove.sh;;
         backup-enable) source ./weave-core/commands/backup-enable.sh;;
         backup-disable) source ./weave-core/commands/backup-disable.sh;;
         *)

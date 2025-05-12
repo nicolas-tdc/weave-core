@@ -18,7 +18,7 @@ backup_temp_dir=$(realpath "$(mktemp -d)")
 execute_command $command_name "$backup_temp_dir"
 
 echo -e "\e[33mCreating archive...\e[0m"
-tar -czvf $BACKUP_DIRECTORY/$backup_name.tar.gz -C "$backup_temp_dir" . # > /dev/null 2>&1
+tar -czvf $BACKUPS_DIRECTORY/$backup_name.tar.gz -C "$backup_temp_dir" . # > /dev/null 2>&1
 rm -rf "$backup_temp_dir"
 
-echo -e "\e[32mCreated backup '$backup_name' in '$BACKUP_DIRECTORY' successfully.\e[0m"
+echo -e "\e[32mCreated backup '$backup_name' in '$BACKUPS_DIRECTORY' successfully.\e[0m"

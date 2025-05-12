@@ -5,66 +5,52 @@ set -e
 
 # This script contains git related helper functions.
 
-# Function: merge_gitignore_files
-# Purpose: Merges multiple .gitignore files from child directories into a single parent .gitignore file.
-# Arguments:
-#   1. services_directory: The directory containing child directories with .gitignore files.
-#   2. output_gitignore: The path to the output .gitignore file.
-# Usage: merge_gitignore_files <services_directory> <output_gitignore>
-merge_gitignore_files() {
+merge_gitignore_file() {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "\e[31mmerge_gitignore_files() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: merge_gitignore_files <services_directory> <output_gitignore>\e[0m"
+        echo -e "\e[31mmerge_gitignore_file() - Error: Two arguments are required.\e[0m"
+        echo -e "\e[31musage: merge_gitignore_file <service_name> <service_path>\e[0m"
         exit 1
     fi
 
-    local services_directory=$1
-    local output_gitignore=$2
+    local service_name=$1
+    local service_path=$2
 
-    if [ ! -f "$output_gitignore" ]; then
-        touch $output_gitignore
-    else
-        echo "" >> "$output_gitignore"
-    fi
+    local input_gitignore="$service_path/.gitignore"
+    local output_gitignore=".gitignore"
 
-    # Collect child .gitignore entries and append to parent .gitignore
-    {
-        for service in $services_directory/*/; do
-            local input_gitignore="${service}.gitignore"
-            
-            if [ -f "$input_gitignore" ]; then
-                # Append service name to output gitignore
-                local service_name="${service#./services/}"
-                echo "" >> "$output_gitignore"
-                echo "# $service" >> "$output_gitignore"
-                echo "" >> "$output_gitignore"
+    if [ -f "$input_gitignore" ]; then
+        if [ ! -f "$output_gitignore" ]; then
+            echo -e "# Application specifics\n.env\nweave.sh\n# Services specifics" > $output_gitignore
+        fi
 
-                # Append input gitignore entries to output gitignore
-                while IFS= read -r line; do
-                    [[ -z "$line" || "$line" =~ ^\s*# ]] && continue
-                    if [[ "$line" == /* ]]; then
-                        echo "$line" >> "$output_gitignore"
-                    else
-                        echo "${service_name}$line" >> "$output_gitignore"
-                    fi
-                done < "$input_gitignore"
+        # Append service name to output gitignore
+        echo "# $service_name" >> "$output_gitignore"
 
-                # Remove child .gitignore
-                rm "$input_gitignore"
+        # Append input gitignore entries to output gitignore
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^\s*# ]] && continue
+            if [[ "$line" == /* ]]; then
+                echo "$line" >> "$output_gitignore"
+            else
+                echo "${service_path}/$line" >> "$output_gitignore"
             fi
-        done
-    }
+        done < "$input_gitignore"
+
+        # Remove child .gitignore
+        rm "$input_gitignore"
+    fi
 }
 
 remove_service_from_gitignore() {
-    if [ -z "$1" || -z "$2" ]; then
-        echo -e "\e[31mremove_service_from_gitignore() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: remove_service_from_gitignore <service_name> <output_gitignore>\e[0m"
+    if [ -z "$1" ]; then
+        echo -e "\e[31mremove_service_from_gitignore() - Error: First argument is required.\e[0m"
+        echo -e "\e[31musage: remove_service_from_gitignore <service_name>\e[0m"
         exit 1
     fi
     local service_name=$1
-    local output_gitignore=$2
-    
+
+    local output_gitignore=".gitignore"
+
     # Remove all empty lines following the service name
     sed -i "/$service_name/,/^$/d" "$output_gitignore"
     # Remove all lines containing the service name from the .gitignore file

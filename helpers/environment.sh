@@ -11,7 +11,7 @@ set -e
 # Returns:
 #   1. app_name: The name of the application
 #   2. services_directory: The directory for services
-#   3. backup_directory: The directory for backups
+#   3. backups_directory: The directory for backups
 # Usage: prepare_application
 #   prepare_application
 prepare_application() {
@@ -23,11 +23,11 @@ prepare_application() {
     mkdir -p $services_directory > /dev/null 2>&1
 
     # Setup backup directory
-    local backup_directory="backups"
-    mkdir -p $backup_directory > /dev/null 2>&1
+    local backups_directory="backups"
+    mkdir -p $backups_directory > /dev/null 2>&1
 
     # Return parsed arguments and options
-    echo "$app_name" "$services_directory" "$backup_directory"
+    echo "$app_name" "$services_directory" "$backups_directory"
 }
 
 # Function: prepare_environment_files
