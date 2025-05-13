@@ -12,6 +12,8 @@ set -e
 # Returns: None
 # Usage:
 #   install_packages <package1> <package2> ...
+# Notes: This function checks if the specified packages are installed and installs them if they are not.
+# It also runs `apt autoremove` after installation to clean up unnecessary packages.
 install_packages() {
     # Define required packages
     packages=("$@")
@@ -41,16 +43,4 @@ install_packages() {
         done
         sudo apt autoremove
     fi
-}
-
-# Function: is_number
-# Purpose: Check if a string is a number
-# Arguments:
-#   $1 - The string to check
-# Returns:
-#   0 if the string is a number, 1 otherwise
-# Usage:
-#   is_number <input_string>
-is_number() {
-    [[ "$1" =~ ^[0-9]+$ ]] && return 0 || return 1
 }

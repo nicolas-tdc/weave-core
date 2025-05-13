@@ -5,6 +5,17 @@ set -e
 
 # This script contains helper functions for managing weave services.
 
+# Function: install_service_files
+# Purpose: Installs service files for a specific service.
+# Arguments:
+#   1. service_name: The name of the service.
+#   2. service_path: The path to the service directory.
+# Returns:
+#   None
+# Usage: install_service_files <service_name> <service_path>
+# Note: This function is used to install service files for a specific service.
+# It formats the docker-compose files and merges the service gitignore file into the application gitignore file.
+# It is not intended to be called directly.
 install_service_files() {
     if [ -z "$1" ] || [ -z "$2" ]; then
         echo -e "\e[31minstall_service_files() - Error: First and second argument are required.\e[0m"
@@ -33,6 +44,15 @@ install_service_files() {
         $service_path
 }
 
+# Function: install_service
+# Purpose: Installs a service by cloning its repository and configuring it.
+# Arguments:
+#   None
+# Returns:
+#   None
+# Usage: install_service
+# Note: This function is used to install a service by cloning its repository and configuring it.
+# It is not intended to be called directly.
 install_service() {
     # Select service from available services
     get_available_services
@@ -83,6 +103,15 @@ install_service() {
     echo -e "\e[32m$service_name: Installed successfully.\e[0m"
 }
 
+# Function: uninstall_service
+# Purpose: Uninstalls a service by removing its directory and configuration.
+# Arguments:
+#   1. service_name: The name of the service to uninstall.
+# Returns:
+#   None
+# Usage: uninstall_service <service_name>
+# Note: This function is used to uninstall a service by removing its directory and configuration.
+# It is not intended to be called directly.
 uninstall_service() {
     if [ -z "$1" ]; then
         echo -e "\e[31muninstall_service() - Error: First argument is required.\e[0m"

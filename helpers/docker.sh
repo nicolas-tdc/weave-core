@@ -22,11 +22,13 @@ format_docker_compose() {
     local service_name=$1
     local compose_file=$2
 
+    # Add global application env_file if not already present
     local app_env_file_path="../../.env"
     if ! grep -q "$app_env_file_path" "$compose_file"; then
         sed -i '/env_file:/a\ \ \ \ \ \ - '"$app_env_file_path" "$compose_file"
     fi
 
+    # Modify the docker-compose file to ensure unique container and volume names
     awk -v container_name="$service_name" '
     BEGIN {
         inside_services = 0;
@@ -120,12 +122,14 @@ check_docker() {
 # Returns: List of networks
 # Usage: find_networks [docker-compose-file]
 find_networks() {
+    # Set default compose file if not provided
     if [ -z "$1" ]; then
         compose_file="docker-compose.yml"
     else
         compose_file=$1
     fi
 
+    # Check if networks section exists and extract network names
     awk '/networks:/ {getline; print $1}' "$compose_file" | sed 's/://g' | sort -u
 }
 
@@ -136,7 +140,7 @@ find_networks() {
 # Usage: create_networks [docker-compose-file]
 create_networks() {
     networks=$(find_networks "$1")
-    
+
     # Loop through networks and create each one
     for net in $networks; do
         if [ -n "$net" ] && [ "$net" != "-" ]; then
@@ -155,6 +159,7 @@ create_networks() {
 remove_networks() {
     networks=$(find_networks $1)
 
+    # Loop through networks and remove each one
     for net in $networks; do
         echo "Removing network: $net"
         docker network rm "$net" 2>/dev/null \

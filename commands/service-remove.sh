@@ -19,12 +19,12 @@ else
     exit 1
 fi
 
+# Check arguments provided
 if [ -z "$1" ]; then
     echo -e "\e[31mError: First argument is required.\e[0m"
     echo -e "\e[31musage: $0 <service_name>\e[0m"
     exit 1
 fi
-
 service_name=$1
 
 echo -e "\e[33m$APP_NAME: Uninstalling '$service_name'...\e[0m"

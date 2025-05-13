@@ -7,11 +7,13 @@ set -e
 
 echo -e "\e[33m$SERVICE_NAME: Trying to start in environment '$ENV_NAME'...\e[0m"
 
+# Check if service contains a docker-compose.yml file
 if ! [ -f "docker-compose.yml" ]; then
     echo -e "\e[31m$SERVICE_NAME: Cannot find docker-compose.yml file. Exiting...\e[0m"
     exit 1
 fi
 
+# Check if service contains a .env file
 if ! [ -f ".env" ]; then
     echo -e "\e[31m$SERVICE_NAME: Cannot find .env file. Exiting...\e[0m"
     exit 1
@@ -19,9 +21,14 @@ fi
 
 # Prepare docker
 echo -e "\e[33m$SERVICE_NAME: Preparing docker...\e[0m"
+
+# Check if docker is installed
 check_docker
+# Create docker networks
 create_networks
+# Stop any existing containers
 docker-compose down > /dev/null 2>&1
+
 echo -e "\e[32m$SERVICE_NAME: Docker is ready.\e[0m"
 
 # Up docker-compose
