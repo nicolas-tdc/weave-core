@@ -9,6 +9,16 @@ set -e
     # Exectue from application root
     cd "$(dirname "$0")"
 
+    WEAVE_CONFIGURATIONS_FILE="weave.conf"
+
+    # Source configurations
+    if [ -f "./weave-core/helpers/configurations.sh" ]; then
+        source ./weave-core/helpers/configurations.sh
+    else
+        echo -e "\e[31mCannot find configurations file. Exiting...\e[0m"
+        exit 1
+    fi
+
     # Source arguments parser
     if [ -f "./weave-core/helpers/arguments-parser.sh" ]; then
         source ./weave-core/helpers/arguments-parser.sh
@@ -37,7 +47,7 @@ set -e
     if [ -f "./weave-core/helpers/utils.sh" ]; then
         source ./weave-core/helpers/utils.sh
     else
-        echo -e "\e[31m$SERVICE_NAME: Cannot find 'utils' helper file. Exiting...\e[0m"
+        echo -e "\e[31mCannot find 'utils' helper file. Exiting...\e[0m"
         exit 1
     fi
 
@@ -45,7 +55,7 @@ set -e
     if [ -f "./weave-core/helpers/docker.sh" ]; then
         source ./weave-core/helpers/docker.sh
     else
-        echo -e "\e[31m$SERVICE_NAME: Cannot find 'docker' helper file. Exiting...\e[0m"
+        echo -e "\e[31mCannot find 'docker' helper file. Exiting...\e[0m"
         exit 1
     fi
 
@@ -64,15 +74,12 @@ set -e
         exit 1
     fi
 
-    read APP_NAME SERVICES_DIRECTORY BACKUPS_DIRECTORY <<< $(prepare_application)
-    export APP_NAME
-    export SERVICES_DIRECTORY
-    export BACKUPS_DIRECTORY
+    # Get application name and services directory
+    get_application_name
+    get_services_directory
 
     # Parse arguments to extract environment and service name
-    read ENV_NAME SERVICE_NAME <<< $(parse_command_arguments "$@")
-    export ENV_NAME
-    export SERVICE_NAME
+    parse_command_arguments "$@"
 
     # Aggregate relevant environment files
     prepare_environment_files "$ENV_NAME"
@@ -88,7 +95,7 @@ set -e
         backup-enable) source ./weave-core/commands/backup-enable.sh;;
         backup-disable) source ./weave-core/commands/backup-disable.sh;;
         *)
-            echo -e "\e[31mInvalid argument. Exiting...\e[0m"
+            echo -e "\e[31m$APP_NAME: Invalid argument. Exiting...\e[0m"
             log_app_usage
             exit 1
             ;;

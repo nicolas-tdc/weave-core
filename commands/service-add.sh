@@ -19,7 +19,8 @@ else
     exit 1
 fi
 
+echo -e "\e[33m$APP_NAME: Trying to add a service...\e[0m"
 
-echo -e "\e[33mTrying to add a service to application '$APP_NAME'...\e[0m"
+install_service
 
-install_service "$SERVICES_DIRECTORY" "weave.conf"
+echo -e "\e[32m$APP_NAME: Done adding service.\e[0m"

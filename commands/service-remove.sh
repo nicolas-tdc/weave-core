@@ -27,11 +27,8 @@ fi
 
 service_name=$1
 
-echo -e "\e[33mTrying to remove a service to application '$APP_NAME'...\e[0m"
+echo -e "\e[33m$APP_NAME: Uninstalling '$service_name'...\e[0m"
 
-# Install service
-echo -e "\e[33mRemoving service $service_name...\e[0m"
+uninstall_service $service_name
 
-uninstall_service $SERVICES_DIRECTORY $service_name
-
-echo -e "\e[32mAdded service successfully.\e[0m"
+echo -e "\e[32m$APP_NAME: Uninstalled '$service_name' successfully.\e[0m"

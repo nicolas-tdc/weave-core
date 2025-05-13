@@ -25,12 +25,18 @@ execute_service_command_script() {
     shift 2
 
     # Execute command on the specific service
-    if [ -d "$service_path" ] && [ -f "${service_path}/weave.sh" ]; then
+    if [ -d "$service_path" ]; then
         cd "$service_path"
+        if ! [ -f ".env.$ENV_NAME" ]; then
+            echo -e "\e[31m$SERVICE_NAME: '.env.$ENV_NAME' not found.\e[0m"
+            exit 1
+        fi
+
+        cp ".env.$ENV_NAME" ".env" > /dev/null 2>&1
         source "$script_path" "$@"
         cd - > /dev/null 2>&1
     else
-        echo -e "\e[31mService '$SERVICE_NAME' not found or missing main weave script.\e[0m"
+        echo -e "\e[31m$SERVICE_NAME: Not found in $service_path.\e[0m"
         exit 1
     fi
 }
@@ -57,23 +63,49 @@ execute_command() {
     script_path="$(cd "$(dirname "$script_relative_path")" && pwd)/$(basename "$script_relative_path")"
 
     if [ "$SERVICE_NAME" == "" ]; then
-        echo -e "\e[33mTrying to $command_name application '$APP_NAME'...\e[0m"
+        # Execute on all services
+        echo -e "\e[33m$APP_NAME: Trying to $command_name...\e[0m"
 
-        for service_path in $SERVICES_DIRECTORY/*/; do
-            SERVICE_NAME=$(basename "$service_path")
+        get_installed_services
+        for key in "${INSTALLED_SERVICE_KEYS[@]}"; do
+            # Sleep option
+            if [ $key == "sleep" ]; then
+                if [ $command_name == "run" ]; then
+                    echo -e "\e[33m$APP_NAME: Sleeping for ${INSTALLED_SERVICES[$key]} seconds...\e[0m"
+                    sleep ${INSTALLED_SERVICES[$key]}
+                fi
+
+                continue
+            fi
+
+            SERVICE_NAME=$key
+            local service_path="$SERVICES_DIRECTORY/$SERVICE_NAME"
+
+            # Check if the service is installed
+            if ! [ -d "$service_path" ]; then
+                echo -e "\e[31mService '$SERVICE_NAME' not found in '$SERVICES_DIRECTORY'.\e[0m"
+                continue
+            fi
 
             execute_service_command_script \
                 $script_path \
-                "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+                $service_path \
                 $@
         done
     else
-        echo -e "\e[33mTrying to $command_name service '$SERVICE_NAME'...\e[0m"
+        echo -e "\e[33m$APP_NAME: Trying to $command_name service '$SERVICE_NAME'...\e[0m"
+
+        local service_path="$SERVICES_DIRECTORY/$SERVICE_NAME"
+
+        # Check if the service is installed
+        if ! [ -d "$service_path" ]; then
+            echo -e "\e[31mService '$SERVICE_NAME' not found in '$SERVICES_DIRECTORY'.\e[0m"
+            exit 1
+        fi
 
         execute_service_command_script \
             $script_path \
-            "$SERVICES_DIRECTORY/$SERVICE_NAME" \
+            $service_path \
             $@
-
     fi
 }

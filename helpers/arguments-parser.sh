@@ -17,22 +17,22 @@ parse_command_arguments() {
     # This function parses command line arguments and sets the environment name and service name.
 
     # Default values
-    local env_name="prod"
-    local service_name=""
+    ENV_NAME="prod"
+    SERVICE_NAME=""
 
     # Parse arguments to extract options
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --s=*|--service=*)
-                service_name="${1#*=}"
+                SERVICE_NAME="${1#*=}"
                 shift
                 ;;
             -dev)
-                env_name="dev"
+                ENV_NAME="dev"
                 shift
                 ;;
             -staging)
-                env_name="staging"
+                ENV_NAME="staging"
                 shift
                 ;;
             *)
@@ -41,6 +41,6 @@ parse_command_arguments() {
         esac
     done
 
-    # Return parsed arguments and options
-    echo "$env_name" "$service_name"
+    export ENV_NAME
+    export SERVICE_NAME
 }

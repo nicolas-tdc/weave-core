@@ -3,6 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+get_backups_directory
+
 # Create a tarball of the backup
 if [ "$SERVICE_NAME" == "" ]; then
     # Backup all services

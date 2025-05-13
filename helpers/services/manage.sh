@@ -34,36 +34,15 @@ install_service_files() {
 }
 
 install_service() {
-    if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "\e[31minstall_service() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: install_service <services_directory> <weave_services_directory>\e[0m"
-        exit 1
-    fi
-
-    local services_directory=$1
-    local services_configuration_file=$2
-
-    # Get available services list from configuration file
-    declare -A available_services
-    section=""
-    # Read config file
-    while IFS='=' read -r key value; do
-        # Detect new section
-        if [[ "$key" == \[*\]* ]]; then
-            section="$key"
-        # Check if inside available-services with valid key/value
-        elif [[ -n "$key" && -n "$value" && "$section" == "[available-services]" ]]; then
-            available_services["$key"]="$value"
-        fi
-    done < "$services_configuration_file"
-
     # Select service from available services
+    get_available_services
+
     echo -e "\e[94mPlease select a service to add to your app:\e[0m"
-    select selected_service in "${!available_services[@]}"; do
+    select selected_service in "${!AVAILABLE_SERVICES[@]}"; do
         if [[ -n $selected_service ]]; then
             # Get the service name from the selected directory
             local selected_service_name=$(basename "$selected_service")
-            local selected_service_url=${available_services["$selected_service"]}
+            local selected_service_url=${AVAILABLE_SERVICES["$selected_service"]}
 
             break;
         else
@@ -78,8 +57,8 @@ install_service() {
         local service_name=${service_name:-"$selected_service_name"}
 
         # Check if service directory already exists
-        if ! [ -d "./$services_directory/$service_name" ]; then
-            local service_path="$services_directory/$service_name"
+        if ! [ -d "./$SERVICES_DIRECTORY/$service_name" ]; then
+            local service_path="$SERVICES_DIRECTORY/$service_name"
             break;
         fi
 
@@ -99,36 +78,36 @@ install_service() {
         $service_path
 
     # Add service to weave services configuration file
-    echo -e "$service_name=$selected_service_name" >> $services_configuration_file
+    echo -e "$service_name=$selected_service_name" >> $WEAVE_CONFIGURATIONS_FILE
 
-    echo -e "\e[32mService $service_name added successfully.\e[0m"
+    echo -e "\e[32m$service_name: Installed successfully.\e[0m"
 }
 
 uninstall_service() {
-    if [ -z "$1" ] || [ -z "$2" ]; then
-        echo -e "\e[31muninstall_service() - Error: First and second argument are required.\e[0m"
-        echo -e "\e[31musage: uninstall_service <services_directory> <service_name>\e[0m"
+    if [ -z "$1" ]; then
+        echo -e "\e[31muninstall_service() - Error: First argument is required.\e[0m"
+        echo -e "\e[31musage: uninstall_service <service_name>\e[0m"
         exit 1
     fi
+    local service_name=$1
 
-    local services_directory=$1
-    local service_name=$2
-
-    local service_path="$services_directory/$service_name"
+    local service_path="$SERVICES_DIRECTORY/$service_name"
 
     # Check if the service directory exists
     if [ ! -d "$service_path" ]; then
-        echo -e "\e[31mService '$service_name' does not exist.\e[0m"
-        exit 1
+        echo -e "\e[31m$service_name: service directory not found in '$service_path'.\e[0m"
+    else
+        rm -rf $service_path
     fi
 
-    echo -e "\e[33m$service_name: Uninstalling...\e[0m"
-
-    rm -rf $service_path
     remove_service_from_gitignore "$service_name"
 
-    # Remove service from services configuration file
-    sed -i "/$service_name=/d" "weave.conf"
+    # Remove service from weave configurations file
+    sed -i "/$service_name=/d" $WEAVE_CONFIGURATIONS_FILE
 
-    echo -e "\e[32m$service_name: Removed successfully.\e[0m"
+    # Remove last line if matches pattern sleep=*
+    if [[ $(tail -n 1 "$WEAVE_CONFIGURATIONS_FILE") == sleep=* ]]; then
+        # Remove the last line
+        sed -i '$d' "$WEAVE_CONFIGURATIONS_FILE"
+    fi
 }

@@ -5,7 +5,7 @@ set -e
 
 # This script is used to manage a weave service's backup task.
 
-echo -e "\e[33m$SERVICE_NAME: Trying to start in environment '$ENV_NAME'...\e[0m"
+echo -e "\e[33m$SERVICE_NAME: Trying to backup in environment '$ENV_NAME'...\e[0m"
 
 backup_temp_dir=$1
 
